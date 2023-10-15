@@ -10,7 +10,7 @@ __credits__ = []
 __license__ = "GPL"
 __version__ = "1.1"
 __maintainer__ = ""
-__contact__ = "https://github.com/moraloamg"
+__email__ = "https://github.com/moraloamg"
 __status__ = "Development"
 
 #Ojo! acordarse de que las rutas en las cadenas de texto deben de contener \\, por ejemplo: C:\\Users\\Usuario\\Desktop
@@ -427,7 +427,6 @@ def modificar_extensiones_imagenes(ruta:str, extension:str, numeracion_auto=Fals
         print('El directorio introducido por parametro no existe o no es un directorio')
     
 
-#---------------------------------------PROBAR--------------------------------
 
 def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=None ,aviso:bool=True)->bool:
     """
@@ -548,7 +547,6 @@ def comprimir_varias_imagenes(ruta:str, calidad:int, numeracion_auto=False, avis
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
-#------------------
 
 def anadir_marca_de_agua(ruta_origen:str, ruta_destino:str, ruta_marca_agua:str, dimensiones_marca:int, nombre:str=None, transparencia:int=65, aviso:bool=True)->bool:
     """
@@ -737,10 +735,13 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
 
 #----------------------Fin del codigo---------------------------------
 
-#TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos
+#TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
 #TODO hacer una version (conectando con otro archivo) para el manejo por consola y para el manejo por interfaz grafica con tkinter
 #TODO ¿Mirar velocidad de ejecucion y optimizar?
-#TODO hacer funciones para rotar y aplicar filtros a las imagenes
+#TODO hacer funciones para rotar, voltear y aplicar filtros a las imagenes
+#TODO Poner directorio de salida para las imágenes modificadas
+
+
 
 
 
