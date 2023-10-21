@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+
+
+"""
+Modulo que contiene funciones para trabajar con imagenes. En desarrollo.
+Si se desea probar las funciones, acordarse de que las rutas en las cadenas
+de texto deben de contener \\, por ejemplo: C:\\Users\\Usuario\\Desktop 
+Tambien sirve utilizar la r: r"C:\Users\Usuario\Desktop"
+"""
+
 from PIL import Image
 import os
 import imghdr
@@ -13,7 +23,6 @@ __maintainer__ = ""
 __email__ = "https://github.com/moraloamg"
 __status__ = "Development"
 
-#Ojo! acordarse de que las rutas en las cadenas de texto deben de contener \\, por ejemplo: C:\\Users\\Usuario\\Desktop
 
 def poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
     """
@@ -740,7 +749,10 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
 #TODO ¿Mirar velocidad de ejecucion y optimizar?
 #TODO hacer funciones para rotar, voltear y aplicar filtros a las imagenes
 #TODO Poner directorio de salida para las imágenes modificadas
+#TODO hacer logging y crear un fichero para eso?
+#TODO Manipular rutas con pathlib?
 
+#TODO poner if __name__ == '__main__' en caso de que ponga el uso por consola aquí más abajo?
 
 
 
