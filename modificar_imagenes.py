@@ -746,10 +746,12 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
 
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
 #TODO hacer una version (conectando con otro archivo) para el manejo por consola y para el manejo por interfaz grafica con tkinter
-#TODO ¿Mirar velocidad de ejecucion y optimizar?
+#TODO ¿Mirar velocidad de ejecucion y optimizar?        
 #TODO hacer funciones para rotar, voltear y aplicar filtros a las imagenes
-#TODO Poner directorio de salida para las imágenes modificadas
-#TODO hacer logging y crear un fichero para eso?
+        
+#TODO Poner directorio de salida para las imágenes modificadas (creo que esto no es mejor hacerlo)
+        
+#TODO poner logs y hacer un fichero para guardarlos?
 #TODO Manipular rutas con pathlib?
 
 #TODO poner if __name__ == '__main__' en caso de que ponga el uso por consola aquí más abajo?
