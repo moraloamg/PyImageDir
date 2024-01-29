@@ -749,7 +749,7 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
 #TODO ¿Mirar velocidad de ejecucion y optimizar?        
 #TODO hacer funciones para rotar, voltear y aplicar filtros a las imagenes
         
-#TODO Poner directorio de salida para las imágenes modificadas (creo que esto no es mejor hacerlo)
+#TODO Poner directorio de salida para las imágenes modificadas (creo que esto es mejor no hacerlo)
         
 #TODO poner logs y hacer un fichero para guardarlos?
 #TODO Manipular rutas con pathlib?
