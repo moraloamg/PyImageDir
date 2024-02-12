@@ -5,7 +5,10 @@
 Modulo que contiene funciones para trabajar con imagenes. En desarrollo.
 Si se desea probar las funciones, acordarse de que las rutas en las cadenas
 de texto deben de contener \\, por ejemplo: C:\\Users\\Usuario\\Desktop 
-Tambien sirve utilizar la r: r"C:\Users\Usuario\Desktop"
+Tambien sirve utilizar la r: r"C:/Users/Usuario/Desktop" (se pueden poner
+las barras invertidas, dependiendo de si tu sistema es Windows o Linux,
+tener en cuenta que en los comentarios no se puede poner la barra \ junto
+a un caracter),
 """
 
 from PIL import Image
@@ -13,6 +16,8 @@ import os
 import imghdr
 import shutil
 from datetime import datetime
+
+import cv2
 
 __author__ = "Adrian Mateos"
 __copyright__ = "Copyright 2023"
@@ -42,7 +47,7 @@ def poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
     """
 
     #Si queremos que el nombre del archivo tenga un numero a modo de indice, extraemos el nombre y lo ponemos con el
-    #contador junto con los caracteres "Nº", de esta manera tendremos las imagenes ordenadas
+    #contador (numero que ya viene dado en el nombre) junto con los caracteres "Nº", de esta manera tendremos las imagenes ordenadas
     #de lo contrario solo obtenemos el nombre del archivo.
     nombre_archivo = ""
 
@@ -69,8 +74,8 @@ def comprobar_duplicadas(ruta_directorio:str, nombre_archivo:str)->str:
 
     Returns:
     --------
-    - nuevo_nombre (str): nuevo nombre que se crea, si no hay duplicados se
-    no se modifica, si hay duplicados de modifica.
+    - nuevo_nombre (str): nuevo nombre que se crea, si no hay duplicados
+    no se modifica, si hay duplicados se modifica.
     """
 
     nuevo_nombre = nombre_archivo
@@ -302,7 +307,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
                         ruta_destino = os.path.join(ruta_destino, nombre)
                     
                         # Guardar la imagen con la extension
-                        imagen.convert("RGB").save(f"{ruta_destino}.{extension}")
+                        imagen.convert("RGB").save(f"{ruta_destino}.{extension}") #TODO UTILIZAR OS.PATH.JOIN COMO EL RESTO????????
                         return True
                     else:
                         if aviso:
@@ -468,13 +473,11 @@ def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=
 
                 #Comprobamos que existe la ruta que guarda las imagenes
                 if os.path.isdir(ruta_destino):
-            
-                    
+                     
                     #En caso de que no hayamos dado ningun nombre, podremos el que tenia
                     if nombre == None:
                         nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
                     
-
                     #Extraemos y anadimos la extension original a la nueva foto
                     extension_original = os.path.splitext(ruta_origen)[1]
                     nombre = f"{nombre}{extension_original}"
@@ -739,17 +742,174 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
             print(f'El indice de transparencia debe de ser menor a 100 y mayor a 1')
     else:           
         print(f'Las dimensiones de la marca han de estar entre 90 y 5')
-                    
 
+
+#----------------------------En proceso---------------------------------------------------------
+
+def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None, aviso:bool=True)->bool:
+    """
+    Función que rota una imagen en unos angulos permitidos.
+
+    Parameters:
+    ----------
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen rotada.
+    - grados (int): grados de la imagen, solo permitidos los valores de 90, -90, y 180.
+    - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. 
+    - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - (bool) True en caso de exito, False en caso de fracaso más un mensaje de error.
+    """
+
+    ANGULOS_PERMITIDOS = [90, -90, 180, -180]
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta_origen = os.path.normpath(ruta_origen)
+    ruta_destino = os.path.normpath(ruta_destino)
+
+    #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
+    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+        try:
+            with Image.open(ruta_origen) as imagen:
+
+                #Comprobamos que existe la ruta que guarda las imagenes
+                if os.path.isdir(ruta_destino):
+
+                    if grados != None:
+                        if grados in ANGULOS_PERMITIDOS:
+
+                            #rotamos la imagen
+                            nueva_imagen = imagen.rotate(grados, expand=True)
+
+                            #En caso de que no hayamos dado ningun nombre, podremos el que tenia
+                            if nombre == None:
+                                nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
+                            
+                            #Extraemos y anadimos la extension original a la nueva foto
+                            extension_original = os.path.splitext(ruta_origen)[1]
+                            nombre = f"{nombre}{extension_original}"
+
+                            #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
+                            #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
+                            nombre = comprobar_duplicadas(ruta_destino, nombre)
+
+                            #Guardamos la nueva imagen
+                            nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
+
+                            #cv2.imwrite(os.path.join(ruta_destino, nombre), nueva_imagen)
+                            return True
+
+                        else:
+                            if aviso:
+                                print(f'El ángulo {grados}, no es válido, solo son válidos los ángulos 90, -90, y 180')
+                            return False
+                    else:
+                        if aviso:
+                            print("No se ha proporcionado un ángulo")
+                        return False
+                else:
+                    if aviso:
+                        print(f'La ruta {ruta_destino} no corresponde a un directorio o esta corrupta')
+                    return False 
+
+        except Exception as e:
+            print(f'Ha ocurrido un error al rotar la imagen: {e}')
+            return False
+    else:
+        if aviso:
+            print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
+        return False
+
+
+def rotar_varias_imagenes(ruta:str, grados:int, numeracion_auto=False, aviso_fallos=False):
+    """
+    Función que rota imágenes halladas en un directorio dado un angulo entre unos valores determinados. 
+    Las imágenes tratadas se dispondrán un directorio llamado 'img_rotadas_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - grados (int): grados de la imagen, solo permitidos los valores de 90, -90, 180.
+    - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - Imágenes rotadas, dentro del directorio con el nombre 'img_rotadas_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    ANGULOS_PERMITIDOS = [90, -90, 180]
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+        if grados != None:
+            if grados in ANGULOS_PERMITIDOS:
+
+                #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
+                nueva_ruta = preparar_directorio(ruta,'img_rotadas_py')
+
+                #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+                if nueva_ruta != None:
+                    #contador que sirve para averiguar la cantidad de fotos que se han transformado
+                    cont = 1
+
+                    #iteramos los archivos para transformarlos
+                    for archivo in os.listdir(ruta):
+                        #obtenemos la direccion completa de la imagen para poder tratarla
+                        ruta_imagen = os.path.join(ruta, archivo)
+
+                        #creamos el nombre del archivo
+                        nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                        
+                        if rotar_imagen(ruta_imagen,nueva_ruta,grados,nombre_archivo,aviso_fallos):
+                            cont = cont + 1
+
+                    print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas') 
+            else:      
+                print(f'El ángulo {grados}, no es válido, solo son válidos los ángulos 90, -90 y 180')          
+        else:
+            print("No se ha proporcionado un ángulo")        
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
+
+
+def voltear_imagen():
+    return None
+
+
+def voltear_varias_imagenes():
+    return None
+
+
+def imagen_a_escala_grises():
+    return None
+
+
+def varias_imagenes_a_escala_grises():
+    return None
 
 #----------------------Fin del codigo---------------------------------
+ruta = r'C:\Users\Usuario\Desktop\cosas\cosas_ilustracion\trabajos_fotos_antiguas\fotos_escala_grises'
 
-#TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
-#TODO hacer una version (conectando con otro archivo) para el manejo por consola y para el manejo por interfaz grafica con tkinter
-#TODO ¿Mirar velocidad de ejecucion y optimizar?        
-#TODO hacer funciones para rotar, voltear y aplicar filtros a las imagenes
+rotar_varias_imagenes(ruta,90)
         
-#TODO Poner directorio de salida para las imágenes modificadas (creo que esto es mejor no hacerlo)
+#TODO mirar si se pueden poner en funciones partes del codigo que se repiten
+#TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
+#TODO ¿Mirar velocidad de ejecucion y optimizar?        
+#TODO hacer funciones para rotar, voltear y aplicar filtros (blanco y negro) a las imagenes, ¿Hacer tambien una funcion para recortar bordes negros?¿Con IA?
+        
+#TODO Que el directorio de salida no se encuentre en el directorio de entrada (esto se hará cuando esté listo el lado del cliente)
         
 #TODO poner logs y hacer un fichero para guardarlos?
 #TODO Manipular rutas con pathlib?
