@@ -781,7 +781,7 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
                     if grados != None:
                         if grados in ANGULOS_PERMITIDOS:
 
-                            #rotamos la imagen
+                            #rotamos la imagen. Es necesario poner expand=True, ya que si no la imagen puede salir recortada
                             nueva_imagen = imagen.rotate(grados, expand=True)
 
                             #En caso de que no hayamos dado ningun nombre, podremos el que tenia
@@ -801,7 +801,6 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
 
                             #cv2.imwrite(os.path.join(ruta_destino, nombre), nueva_imagen)
                             return True
-
                         else:
                             if aviso:
                                 print(f'El ángulo {grados}, no es válido, solo son válidos los ángulos 90, -90, y 180')
@@ -902,7 +901,7 @@ def varias_imagenes_a_escala_grises():
 #----------------------Fin del codigo---------------------------------
 ruta = r'C:\Users\Usuario\Desktop\cosas\cosas_ilustracion\trabajos_fotos_antiguas\fotos_escala_grises'
 
-rotar_varias_imagenes(ruta,90)
+rotar_varias_imagenes(ruta,90) #TODO comprobar casos de fallo
         
 #TODO mirar si se pueden poner en funciones partes del codigo que se repiten
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
@@ -915,6 +914,9 @@ rotar_varias_imagenes(ruta,90)
 #TODO Manipular rutas con pathlib?
 
 #TODO poner if __name__ == '__main__' en caso de que ponga el uso por consola aquí más abajo?
+
+#TODO (En un mismo script o clase) Orden -> funciones independientes (las de arriba), funciones dependientes (las de abajo)
+#Se han de usar en las apis las funciones dependientes (las tochas) ¿Buscar algun modo de hacer publicas las que se vayan a usar y privadas las que no?¿utilizar alguna convencion o libreria?
 
 
 
