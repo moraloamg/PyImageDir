@@ -744,7 +744,6 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
         print(f'Las dimensiones de la marca han de estar entre 90 y 5')
 
 
-#----------------------------En proceso---------------------------------------------------------
 
 def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None, aviso:bool=True)->bool:
     """
@@ -1003,7 +1002,9 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
         print('El directorio introducido por parametro no existe o no es un directorio')
 
 
-def quitar_bordes_negros(image):
+#----------------------------En proceso---------------------------------------------------------
+
+def prueba_cortar_bordes(image):
     image = np.array(image)
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, thresh = cv2.threshold(image_gray, 1, 255, cv2.THRESH_BINARY)
@@ -1023,14 +1024,128 @@ def quitar_bordes_negros(image):
     return crop
 
 
-def quitar_varios_bordes_negros():
-    return None
+
+
+
+def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, aviso:bool=True)->bool:
+    """
+    Función que recorta una imagen.
+
+    Parameters:
+    ----------
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen rotada.
+    - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. 
+    - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - (bool) True en caso de exito, False en caso de fracaso más un mensaje de error.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta_origen = os.path.normpath(ruta_origen)
+    ruta_destino = os.path.normpath(ruta_destino)
+
+    #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
+    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+        try:
+            with Image.open(ruta_origen) as imagen:
+
+                #Comprobamos que existe la ruta que guarda las imagenes
+                if os.path.isdir(ruta_destino):
+                        
+                        #el formato de salida es un numpy.ndarray, y hay que pasarlo a Image con .fromarray
+                        nueva_imagen = Image.fromarray(prueba_cortar_bordes(imagen))
+
+                        #En caso de que no hayamos dado ningun nombre, podremos el que tenia
+                        if nombre == None:
+                            nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
+                        
+                        #Extraemos y anadimos la extension original a la nueva foto
+                        extension_original = os.path.splitext(ruta_origen)[1]
+                        nombre = f"{nombre}{extension_original}"
+
+                        #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
+                        #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
+                        nombre = comprobar_duplicadas(ruta_destino, nombre)
+
+                        #Guardamos la nueva imagen
+                        nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
+
+                        return True
+                    
+                else:
+                    if aviso:
+                        print(f'La ruta {ruta_destino} no corresponde a un directorio o esta corrupta')
+                    return False 
+
+        except Exception as e:
+            print(f'Ha ocurrido un error al voltear la imagen: {e}')
+            return False
+    else:
+        if aviso:
+            print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
+        return False
+
+
+
+def recortar_varios_bordes_negros(ruta:str, numeracion_auto=False, aviso_fallos=False):
+    """
+    Función que invierte imágenes halladas en un directorio, de izquierda a derecha o de arriba a abajo. 
+    Las imágenes tratadas se dispondrán un directorio llamado 'img_recortadas_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - Imágenes recortadas, dentro del directorio con el nombre 'img_recortadas_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+
+        #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
+        nueva_ruta = preparar_directorio(ruta,'img_recortadas_py')
+
+        #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+        if nueva_ruta != None:
+            #contador que sirve para averiguar la cantidad de fotos que se han transformado
+            cont = 1
+
+            #iteramos los archivos para transformarlos
+            for archivo in os.listdir(ruta):
+                #obtenemos la direccion completa de la imagen para poder tratarla
+                ruta_imagen = os.path.join(ruta, archivo)
+
+                #creamos el nombre del archivo
+                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+
+                if recortar_bordes_negros(ruta_imagen, nueva_ruta, nombre_archivo, aviso_fallos):
+                    cont = cont + 1
+
+            print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')                
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
 
 #----------------------Fin del codigo---------------------------------
-ruta = r'C:\Users\Usuario\Desktop\cosas\cosas_ilustracion\trabajos_fotos_antiguas\fotos_escala_grises'
+ruta = r'C:\Users\Usuario\Desktop\cosas\cosas_ilustracion\trabajos_fotos_antiguas\fotos_escala_grises\prueba_negros'
 
 try:
-    voltear_varias_imagenes(ruta,2)
+    recortar_varios_bordes_negros(ruta)
 except TypeError as e:
     print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
