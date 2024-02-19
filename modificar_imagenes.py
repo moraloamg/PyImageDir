@@ -1004,6 +1004,7 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
 
 #----------------------------En proceso---------------------------------------------------------
 
+#TODO mejorar esto???
 def prueba_cortar_bordes(image):
     image = np.array(image)
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
