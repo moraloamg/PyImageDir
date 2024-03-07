@@ -1006,22 +1006,38 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
 
 #TODO mejorar esto???
 def prueba_cortar_bordes(image):
+    #Convierte la imagen de entrada en una matriz NumPy.
     image = np.array(image)
+    #Convierte la imagen a escala de grises utilizando la función `cvtColor` de OpenCV
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #Aplica un umbral a la imagen en escala de grises para binarizarla, convirtiendo los píxeles en blanco o negro.
+    #Los píxeles con intensidades menores que 1 se convierten en negro (0)
+    #y los píxeles con intensidades mayores se convierten en blanco (255).
     _, thresh = cv2.threshold(image_gray, 1, 255, cv2.THRESH_BINARY)
+    #Encuentra los contornos de la imagen binarizada utilizando la función `findContours` de OpenCV. `RETR_EXTERNAL`
+    #significa que solo se devolverán los contornos externos y `CHAIN_APPROX_SIMPLE` significa que se utilizará una
+    #aproximación de contorno simple.
     contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #Inicializa variables para almacenar el contorno más grande encontrado y su área máxima.
     biggest = np.array([])
     max_area = 0
+    #Itera sobre todos los contornos encontrados. Calcula el área de cada contorno, su perímetro
+    #y una aproximación de polígono con la función `approxPolyDP` de OpenCV.
     for cntrs in contours:
         area = cv2.contourArea(cntrs)
         peri = cv2.arcLength(cntrs, True)
         approx = cv2.approxPolyDP(cntrs, 0.02 * peri, True)
+        #Si el área del contorno actual es mayor que la máxima área encontrada hasta ahora y la cantidad
+        #de vértices de la aproximación del polígono es 4 (lo que indica que el contorno podría ser un cuadrilátero),
+        #actualiza las variables `biggest` y `max_area` para almacenar este contorno.
         if area > max_area and len(approx) == 4:
             biggest = approx
             max_area = area
+    #Encuentra el rectángulo delimitador del contorno más grande y recorta la imagen original utilizando este rectángulo delimitador.
     cnt = biggest
     x, y, w, h = cv2.boundingRect(cnt)
     crop = image[y : y + h, x : x + w]
+    #Devuelve la imagen recortada que representa la región de interés sin los bordes negros.
     return crop
 
 
