@@ -436,7 +436,7 @@ def modificar_extensiones_imagenes(ruta:str, extension:str, numeracion_auto=Fals
                 if transformar_extension_imagen(ruta_imagen,nueva_ruta,extension,nombre_archivo,aviso_fallos):
                     cont = cont + 1
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes redimensionadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
+            print(f'Proceso terminado, {str(cont-1)} imagenes modificadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
     
@@ -1002,7 +1002,6 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
         print('El directorio introducido por parametro no existe o no es un directorio')
 
 
-#----------------------------En proceso---------------------------------------------------------
 
 def prueba_cortar_bordes(imagen_con_bordes):
     #Convierte la imagen de entrada en una matriz NumPy.
@@ -1157,11 +1156,162 @@ def recortar_varios_bordes_negros(ruta:str, numeracion_auto=False, aviso_fallos=
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
+
+#----------------------------En proceso---------------------------------------------------------
+
+
+def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_izq:int=0, margen_sup:int=0, margen_inf:int=0, nombre:str=None, aviso:bool=True)->bool:
+    """
+    Función que recorta una imagen. Se toman como referencia los margenes de la foto y
+    la distancia de recortado (en pixeles) se cuentan conforme a dichos margenes.
+
+    Parameters:
+    ----------
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen recortada.
+    - margen_der (int): margen derecha de la foto en pixeles, por defecto a 0 px.
+    - margen_izq (int): margen izquierda de la foto en pixeles, por defecto a 0 px.
+    - margen_sup (int): margen superior de la foto en pixeles, por defecto a 0 px.
+    - margen_inf (int): margen inferior de la foto en pixeles, por defecto a 0 px.
+    - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. 
+    - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+
+    Returns:
+    --------
+    - (bool) True en caso de exito, False en caso de fracaso más un mensaje de error.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta_origen = os.path.normpath(ruta_origen)
+    ruta_destino = os.path.normpath(ruta_destino)
+
+    #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
+    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+        try:
+            with Image.open(ruta_origen) as imagen:
+
+                #Comprobamos que existe la ruta que guarda las imagenes
+                if os.path.isdir(ruta_destino):
+
+                    #obtenemos el alto y ancho de la imagen
+                    ancho, alto = imagen.size
+    
+                    #definimos las coordenadas del area a recortar
+                    izquierda = margen_izq
+                    superior = margen_sup
+                    derecha = ancho - margen_der
+                    inferior = alto - margen_inf
+                    
+                    #recortamos las imagen
+                    nueva_imagen = imagen.crop((izquierda, superior, derecha, inferior))
+
+                    #En caso de que no hayamos dado ningun nombre, podremos el que tenia
+                    if nombre == None:
+                        nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
+                    
+
+                    #Extraemos y anadimos la extension original a la nueva foto
+                    extension_original = os.path.splitext(ruta_origen)[1]
+                    nombre = f"{nombre}{extension_original}"
+
+                    #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
+                    #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
+                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+
+                    #Convertir al modo RGB si es RGBA, es decir, si tiene canal Alpha y hay transparencia,
+                    #ya que el formato JPEG o JPG no puede guardar datos en modo RGBA, por ende, quitamos la transparencia
+                    #Guardamos la imagen en la nueva ruta y aumentamos el contador, utilizamos os.path.join para evitar
+                    #problemas con la barra '\'
+                    nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
+                    return True
+                else:
+                    if aviso:
+                        print(f'La ruta {ruta_destino} no corresponde a un directorio o esta corrupta')
+                    return False 
+
+        except Exception as e:
+            print(f'Ha ocurrido un error al recortar la imagen: {e}')
+            return False
+    else:
+        if aviso:
+            print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
+        return False
+    
+
+
+def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_sup:int=0, margen_inf:int=0, numeracion_auto=False, aviso_fallos=False):
+    """
+    Función la cual aplica un recorte a las imágenes halladas en un directorio.
+    El recorte tomará como referencia los márgenes de las fotos. La medida será en pixeles.
+    Las imágenes tratadas se dispondrán un directorio llamado 'img_recortadas_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - margen_der (int): margen derecha de la foto en pixeles, por defecto a 0 px.
+    - margen_izq (int): margen izquierda de la foto en pixeles, por defecto a 0 px.
+    - margen_sup (int): margen superior de la foto en pixeles, por defecto a 0 px.
+    - margen_inf (int): margen inferior de la foto en pixeles, por defecto a 0 px.
+    - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - Imágenes tratadas, dentro del directorio con el nombre 'img_recortadas_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+
+        #Comprobamos que las medidas que se introducen son adecuadas
+        if (margen_der >= 0 and margen_izq >= 0 and margen_sup >= 0 and margen_inf >= 0):
+            if (isinstance(margen_izq, int) and isinstance(margen_der, int) and isinstance(margen_sup, int) and isinstance(margen_inf, int)):
+
+                #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
+                nueva_ruta = preparar_directorio(ruta, "img_recortadas_py")
+
+                #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+                if nueva_ruta != None:
+                    #contador que sirve para averiguar la cantidad de fotos que se han transformado
+                    cont = 1
+
+                    #iteramos los archivos para transformarlos
+                    for archivo in os.listdir(ruta):
+                        #obtenemos la direccion completa de la imagen para poder tratarla
+                        ruta_imagen = os.path.join(ruta, archivo)
+                        
+                        #creamos el nombre del archivo
+                        nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+
+                        if recortar_foto(ruta_imagen,nueva_ruta,margen_der,margen_izq,margen_sup,margen_inf,nombre=nombre_archivo,aviso=aviso_fallos):
+                            cont += 1
+
+                    print(f'Proceso terminado, {str(cont-1)} imagenes recortadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')
+            else:
+                print('Los parametros deben de ser numeros enteros')
+        else:
+            print('Los parametros de los margenes debe de ser mayor o igual que cero')
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
+
+
+
 #----------------------Fin del codigo---------------------------------
-ruta = r'C:\Users\Usuario\Desktop\cosas\cosas_ilustracion\trabajos_fotos_antiguas\fotos_escala_grises\prueba_negros'
+ruta = r'C:\Users\Usuario\Desktop\aaa'
 
 try:
-    recortar_varios_bordes_negros(ruta)
+    recortar_varias_fotos(ruta,195, 195, 0, 108)
+    #redimensionar_varias_fotos(ruta,1345,1899)
 except TypeError as e:
     print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
@@ -1185,7 +1335,7 @@ except TypeError as e:
 #TODO (En un mismo script o clase) Orden -> funciones independientes (las de arriba), funciones dependientes (las de abajo)
 #Se han de usar en las apis las funciones dependientes (las tochas) ¿Buscar algun modo de hacer publicas las que se vayan a usar y privadas las que no?¿utilizar alguna convencion o libreria?
 
-
+#TODO ¿mostrar salida por consola de algún tipo para ver el progreso de tratado de las fotos?
 
 
 
