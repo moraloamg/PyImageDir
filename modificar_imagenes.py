@@ -1319,8 +1319,7 @@ except TypeError as e:
         
 #TODO mirar si se pueden poner en funciones partes del codigo que se repiten
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
-#TODO ¿Mirar velocidad de ejecucion y optimizar aquello que se pueda (poner funciones para aquellos trozos que se repitan?        
-#TODO hacer funciones para rotar, voltear y aplicar filtros (blanco y negro) a las imagenes, ¿Hacer tambien una funcion para recortar bordes negros?¿Con IA?
+#TODO ¿Mirar velocidad de ejecucion y optimizar aquello que se pueda (poner funciones para aquellos trozos que se repitan?
         
 #TODO Que el directorio de salida no se encuentre en el directorio de entrada (Que el directorio se proporcione de manera independiente, esto se hará cuando esté listo el lado del cliente)
         
