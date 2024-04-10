@@ -1003,7 +1003,19 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
 
 
 
-def prueba_cortar_bordes(imagen_con_bordes):
+def algoritmo_cortar_bordes(imagen_con_bordes:Image):
+    """
+    Función que contiene un algoritmo para detectar y recortar bordes negros de una imagen.
+
+    Parameters:
+    ----------
+    - image_con_bordes (PIL.Image): objeto de la clase PIL.Image, que contiene la imagen con bordes negros.
+
+    Returns:
+    --------
+    - corte (numpy.array): matriz con los datos de la imagen que ha sido recortada.
+    """
+    
     #Convierte la imagen de entrada en una matriz NumPy.
     imagen_con_bordes = np.array(imagen_con_bordes)
     #Convierte la imagen a escala de grises utilizando la función `cvtColor` de OpenCV
@@ -1072,7 +1084,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
                 if os.path.isdir(ruta_destino):
                         
                         #el formato de salida es un numpy.ndarray, y hay que pasarlo a Image con .fromarray
-                        nueva_imagen = Image.fromarray(prueba_cortar_bordes(imagen))
+                        nueva_imagen = Image.fromarray(algoritmo_cortar_bordes(imagen))
 
                         #En caso de que no hayamos dado ningun nombre, podremos el que tenia
                         if nombre == None:
@@ -1335,6 +1347,9 @@ except TypeError as e:
 #Se han de usar en las apis las funciones dependientes (las tochas) ¿Buscar algun modo de hacer publicas las que se vayan a usar y privadas las que no?¿utilizar alguna convencion o libreria?
 
 #TODO ¿mostrar salida por consola de algún tipo para ver el progreso de tratado de las fotos?
+#TODO ¿hacer versión web y versión de escritorio?
+
+#TODO si hago una versión web tendré que hacer una API que haga de intermediario.
 
 
 
