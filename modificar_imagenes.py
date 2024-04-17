@@ -1316,7 +1316,7 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
-
+#TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
 
 #----------------------Fin del codigo---------------------------------
 ruta = r'C:\Users\Usuario\Desktop\aaa'
@@ -1350,6 +1350,8 @@ except TypeError as e:
 #TODO ¿hacer versión web y versión de escritorio?
 
 #TODO si hago una versión web tendré que hacer una API que haga de intermediario.
+
+
 
 
 
