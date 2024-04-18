@@ -1,0 +1,61 @@
+/* CABECERA */
+.cabecera {
+  background: #fff;
+  width: 100%;
+  height: 60px;
+  z-index: 1041;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
+  box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
+  padding: 0 24px;
+}
+
+/*logo de la pagina*/
+.logo {
+  max-width: 200px; /* Ancho máximo del logo */
+  margin-left: 8px; /* Margen a la izquierda del logo */
+  display: inline-block; /* Mostrar la imagen como un bloque en línea */
+  position: absolute; /* Posiciona la imagen de forma absoluta en relación con el header */
+  top: 50%; /* Mueve la imagen al centro del header verticalmente */
+  transform: translateY(
+    -50%
+  ); /* Ajusta la posición para que el centro de la imagen coincida con el centro del header */
+}
+
+.logo svg {
+  width: 100%; /* La imagen ocupará el 100% del ancho disponible */
+  height: auto; /* La altura se ajustará automáticamente para mantener la proporción */
+}
+/*-----------------------------*/
+
+.header nav .menu--md {
+  display: none;
+  -ms-flex-align: center;
+  align-items: center;
+  color: #161616;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  height: 100%;
+}
+
+.ico {
+  width: 20px;
+  height: 20px;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0)
+    url(../img/SVG/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg);
+  display: block;
+}
+
+.ico--down {
+  background-position: -55px -146px;
+}
