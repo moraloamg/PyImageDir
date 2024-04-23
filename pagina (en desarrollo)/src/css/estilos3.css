@@ -1,3 +1,4 @@
+/*cabecera*/
 .header-login-signup {
   background-color: #ffffff;
   box-shadow: 0 1px 1px #ccc;
@@ -21,16 +22,16 @@
   max-width: 170px; /* Ajusta este valor según el tamaño deseado */
 }
 
-/* The navigation links */
-
-.header-login-signup .header-limiter a {
-  color: #2c2c2c;
-  text-decoration: none;
-}
-
+/*flecha*/
 .arrow-img {
   vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
   max-width: 25px; /* Ajusta este valor según el tamaño deseado */
+}
+
+/* The navigation links */
+.header-login-signup .header-limiter a {
+  color: #2c2c2c;
+  text-decoration: none;
 }
 
 .header-login-signup .header-limiter nav {
@@ -82,7 +83,7 @@
   border-radius: 3px;
 }
 
-/* Making the header responsive */
+/* --------------------------- Making the header responsive ----------------------------------------- */
 
 @media all and (max-width: 600px) {
   .header-login-signup {

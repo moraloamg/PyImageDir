@@ -1,0 +1,121 @@
+/*cabecera*/
+.cabecera {
+  background-color: #ffffff;
+  box-shadow: 0 1px 1px #ccc;
+  padding: 20px 40px;
+  height: 80px;
+  color: #ffffff;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
+  box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
+}
+
+/*Hacer que el encabezado no tenga bordes y ocupe todo su espacio*/
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/*centrador cabecera: centra los elementos de que estan dentro del div de cabecera*/
+.centrador-cabecera {
+  max-width: 1200px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* Logo */
+.logo-img {
+  float: left;
+  max-width: 170px; /* Ajusta este valor según el tamaño deseado */
+}
+
+/* estilos generales de la barra de navegacion */
+.centrador-cabecera nav {
+  font: 16px Arial, Helvetica, sans-serif;
+  line-height: 40px;
+  float: left;
+  margin: 0 0 0 75px;
+  padding: 0;
+}
+
+/* Espacio entre cada enlace de la linea de navegación, siempre que sean enlaces */
+.centrador-cabecera nav a {
+  margin-right: 30px;
+}
+
+/* Modificacion de enlaces, se quita el color azul y la barra de subtitulado */
+.centrador-cabecera a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.iconos-cabecera {
+  vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+  max-width: 35px; /* Ajusta este valor según el tamaño deseado */
+}
+
+/*-------Elementos de la barra de navegacion-----------*/
+.contenedor-apartado-izquierda {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/*flecha*/
+.flecha-icon {
+  vertical-align: middle;
+  max-width: 25px; /* Ajusta este valor según el tamaño deseado */
+}
+/*-------------------*/
+
+/*-------Elementos de la parte izquierda del header-----------*/
+.centrador-cabecera ul {
+  list-style: none; /*se quitan los puntos o marcadores*/
+  float: right; /*se pone a la derecha del header*/
+  margin: 0; /* Añadir un margen de ser necesario */
+  padding: 0px; /* Añadir un relleno de ser necesario */
+  line-height: 40px;
+}
+
+/*------modificador de los elementos de las listas-----*/
+.centrador-cabecera li {
+  display: inline; /* Hace que los elementos de la lista sean horizontales */
+  margin-left: 10px; /* Añadir margen entre los elementos de la lista si es necesario */
+}
+/*-------------------*/
+
+/*resaltar de color azul el elemento de navegacion cuando se pasa el raton por encima*/
+.centrador-cabecera nav a:hover {
+  color: #608bd2;
+}
+
+
+/* --------------------------- Hacer la cabecera responsive ----------------------------------------- */
+
+@media all and (max-width: 600px) {
+  .cabecera {
+    padding: 25px;
+    height: 110px;
+  }
+
+  .cabecera .centrador-cabecera .logo-img {
+    float: none;
+    margin: -8px 0 2px;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .cabecera .centrador-cabecera nav {
+    margin: 0;
+    float: none;
+  }
+
+  .cabecera .centrador-cabecera nav a {
+    font-size: 13px;
+  }
+
+  .cabecera .centrador-cabecera li {
+    display: block;
+  }
+}
+  
