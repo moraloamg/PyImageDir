@@ -1,4 +1,5 @@
-/*cabecera*/
+/*BASE CABECERA*----------------------------------------------------------/
+/*crea la base de la cabecera*/
 .cabecera {
   background-color: #ffffff;
   box-shadow: 0 1px 1px #ccc;
@@ -10,26 +11,29 @@
   box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
 }
 
-/*Hacer que el encabezado no tenga bordes y ocupe todo su espacio*/
+/*Hacer que la cabecera no tenga bordes y ocupe todo su espacio*/
 body {
   margin: 0;
   padding: 0;
 }
 
-/*centrador cabecera: centra los elementos de que estan dentro del div de cabecera*/
+/*CENTRADOR DE LA CABECERA*/
+/*centra los elementos de que estan dentro del div de cabecera*/
 .centrador-cabecera {
   max-width: 1200px;
   text-align: center;
   margin: 0 auto;
 }
 
-/* Logo */
+/*MODIFICADOR LOGO*/
+/*Hace que el logo se coloque a la derecha se modifica su tamaño*/
 .logo-img {
   float: left;
-  max-width: 170px; /* Ajusta este valor según el tamaño deseado */
+  max-width: 170px;
 }
 
-/* estilos generales de la barra de navegacion */
+/*CENTRADOR DE ELEMENTOS DEL NAV*/
+/*Aplica modificaciones al elemento NAV; fuente y tipografía, tamaño de línea y que esté alineado a la izquierda*/
 .centrador-cabecera nav {
   font: 16px Arial, Helvetica, sans-serif;
   line-height: 40px;
@@ -38,7 +42,7 @@ body {
   padding: 0;
 }
 
-/* Espacio entre cada enlace de la linea de navegación, siempre que sean enlaces */
+/* Modifica el margen derecho de los enlaces A que están dentro del elemento NAV */
 .centrador-cabecera nav a {
   margin-right: 30px;
 }
@@ -49,50 +53,51 @@ body {
   text-decoration: none;
 }
 
-.iconos-cabecera {
-  vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
-  max-width: 35px; /* Ajusta este valor según el tamaño deseado */
-}
-
-/*-------Elementos de la barra de navegacion-----------*/
+/*-------Elementos del contenedor de la barra de navegacion-----------*/
+/* Dispone los elementos del contenedor alineados en el medio */
 .contenedor-apartado-izquierda {
   display: inline-block;
   vertical-align: middle;
 }
 
-/*flecha*/
+/* Modifica el tamaño de la flecha y la alinea en el centro de su contenedor correspondiente*/
 .flecha-icon {
   vertical-align: middle;
-  max-width: 25px; /* Ajusta este valor según el tamaño deseado */
+  max-width: 25px;
 }
-/*-------------------*/
-
-/*-------Elementos de la parte izquierda del header-----------*/
-.centrador-cabecera ul {
-  list-style: none; /*se quitan los puntos o marcadores*/
-  float: right; /*se pone a la derecha del header*/
-  margin: 0; /* Añadir un margen de ser necesario */
-  padding: 0px; /* Añadir un relleno de ser necesario */
-  line-height: 40px;
-}
-
-/*------modificador de los elementos de las listas-----*/
-.centrador-cabecera li {
-  display: inline; /* Hace que los elementos de la lista sean horizontales */
-  margin-left: 10px; /* Añadir margen entre los elementos de la lista si es necesario */
-}
-/*-------------------*/
 
 /*resaltar de color azul el elemento de navegacion cuando se pasa el raton por encima*/
 .centrador-cabecera nav a:hover {
   color: #608bd2;
 }
 
+/*-------Elementos de la parte izquierda del header-----------*/
+/*Alinea los iconos de la parte derecha de la cabecera y establece una distancia entre ellos.*/
+.iconos-cabecera {
+  vertical-align: middle;
+  max-width: 35px;
+}
 
-/* --------------------------- Hacer la cabecera responsive ----------------------------------------- */
+/*se centran los elementos (la lista de iconos) de la parte derecha del header*/
+.centrador-cabecera ul {
+  list-style: none; /*se quitan los puntos o marcadores*/
+  float: right; /*se pone a la derecha del header*/
+  margin: 0;
+  padding: 0px;
+  line-height: 40px;
+}
 
+/*Pone los elementos de la lista en horizontal y les da un pequeño margen entre ellos*/
+.centrador-cabecera li {
+  display: inline; /* Hace que los elementos de la lista sean horizontales */
+  margin-left: 10px; /* Añadir margen entre los elementos de la lista si es necesario */
+}
 
+/* --------------------------- Hacer la cabecera responsiva ----------------------------------------- */
+
+/*DISEÑO 1: PANTALLAS MEDIANAS Y DE TABLETAS*/
 @media all and (min-width: 361px) and (max-width: 750px) {
+  /*se aumenta el ancho de la cabecera para que quepan mejor los elementos*/
   .cabecera {
     padding: 25px;
     height: 110px;
@@ -116,7 +121,7 @@ body {
 
   .cabecera .centrador-cabecera ul {
     line-height: 25px;
-    margin: -90px 0 0 0px; /* Ajusta el valor negativo según lo necesites, esto es lo que lo sube hacia arriba */
+    margin: -90px 0 0 0px; /*Se pone el valor en negativo para desplazar los elementos hacia arriba.*/
   }
 
   .cabecera .centrador-cabecera li {
@@ -126,10 +131,9 @@ body {
   }
 }
 
-
-
+/*DISEÑO 2: PANTALLAS DE MOVILES*/
+/*(el maximo de pixeles debe de coincidir con el mínimo de píxeles del anterior diseño)*/
 @media all and (min-width: 100px) and (max-width: 361px) {
-
   .cabecera {
     padding: 5px;
     height: 110px;
@@ -151,12 +155,10 @@ body {
     margin: 0 0 0 0;
     display: block;
   }
- 
 
   .contenedor-apartado-izquierda span {
     font-size: 12px;
     text-align: center;
-    
   }
 
   .cabecera .centrador-cabecera nav {
@@ -165,19 +167,18 @@ body {
     display: flex;
   }
 
-  
   .centrador-cabecera nav a {
     margin-right: 10px;
   }
 
-  .flecha-icon, .iconos-cabecera {
+  .flecha-icon .iconos-cabecera {
     width: 20px;
     height: auto;
   }
 
   .cabecera .centrador-cabecera ul {
     line-height: 25px;
-    margin: -30px 0 0 0px; /* Ajusta el valor negativo según lo necesites, esto es lo que lo sube hacia arriba */
+    margin: -30px 0 0 0px; /*Se pone el valor en negativo para desplazar los elementos hacia arriba.*/
   }
 
   .cabecera .centrador-cabecera li {
@@ -185,6 +186,4 @@ body {
     margin: 0 0 0 15px 0;
     margin-left: 0px;
   }
-
 }
-  
