@@ -10,6 +10,8 @@
   background-image: url("../img/SVG/background-subtle-prism.svg");
 }
 
+/* --------------------------- titulo y subtitulo----------------------------------------- */
+
 /*dispone las medidas para el titulo y subtitulo del cuerpo de la pagina*/
 .titulo-cuerpo {
   padding: 30px 45px;
@@ -40,7 +42,91 @@
   margin: auto auto 28px;
 }
 
-/* --------------------------- Hacer el cuerpo responsive ----------------------------------------- */
+/*---------------------------- Caja de herramientas ----------------------------------------*/
+
+.herramientas {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  margin: auto;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0 68px 42px;
+}
+
+.herramientas-contenedor {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.herramientas-elemento {
+  background: #fff;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -ms-flex-preferred-size: calc(16.550% - 4px);
+  flex-basis: calc(16.550% - 4px);
+  border: 1px solid #f5f5fa;
+  margin: 2px;
+  position: relative;
+  overflow: hidden;
+  -webkit-transition: background-color 0.4s ease-out,
+    -webkit-box-shadow 0.4s ease-out;
+  transition: background-color 0.4s ease-out, -webkit-box-shadow 0.4s ease-out;
+  -o-transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+  transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out;
+  transition: box-shadow 0.4s ease-out, background-color 0.4s ease-out,
+    -webkit-box-shadow 0.4s ease-out;
+  z-index: 1;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.herramientas-elemento a {
+  display: block;
+  padding: 32px;
+  position: relative;
+  z-index: 2;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.herramientas-elemento-icono {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+.herramientas-elemento h3 {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  color: #33333b;
+  margin-bottom: 8px;
+}
+
+.herramientas-elemento-descripcion p {
+  line-height: 18px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .3px;
+  font-size: 13px;
+  color: #707078;
+}
+
+/* --------------------------- Apartado responsivo ----------------------------------------- */
+/* --------------------------- titulo y subtitulo responsivo----------------------------------------- */
 
 /*los estilos dentro de esa consulta de medios se
 aplicarán solo cuando el ancho del dispositivo
@@ -93,3 +179,83 @@ aplicarán solo cuando el ancho del dispositivo
     line-height: 20px;
   }
 }
+
+/*---------------------------- Caja de herramientas responsiva --------------------------------------*/
+/*POR HACER Y ARREGLAR (EN ESPECIAL LOS CAMBIOS DE TAMAÑOS DE PANTALLA, PUES LO QUE HAY AQUI FALLA)*/
+
+
+@media (max-width: 90em) {
+  .herramientas {
+    padding: 0 32px 32px;
+  }
+}
+
+@media (max-width: 960px){
+  .herramientas {
+    padding: 0 24px 24px;
+  }
+}
+
+/*
+@media (max-width: 1280px) {
+  .herramientas-elemento {
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -ms-flex-preferred-size: calc(25% - 4px);
+    flex-basis: calc(25% - 4px);
+  }
+}
+
+@media (max-width: 1300px) {
+  .herramientas-elemento {
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -ms-flex-preferred-size: calc(20% - 4px);
+    flex-basis: calc(20% - 4px);
+  }
+}
+
+@media (max-width: 98.75em) {
+  .herramientas-elemento {
+    font-size: 36px;
+    line-height: 38px;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    -ms-flex-preferred-size: calc(20% - 4px);
+    flex-basis: calc(20% - 4px);
+  }
+}
+
+@media (max-width: 98.75em) {
+  .herramientas-elemento a {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 90em) {
+  .herramientas-elemento-icono {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .herramientas-elemento-descripcion p {
+      font-size: 12px;
+      line-height: 16px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .herramientas-elemento-descripcion p {
+      font-size: 12px;
+      line-height: 16px;
+  }
+}
+*/

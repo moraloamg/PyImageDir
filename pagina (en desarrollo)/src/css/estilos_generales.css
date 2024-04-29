@@ -1,0 +1,24 @@
+/*importar tipografias*/
+@font-face {
+  font-family: "fuente_estandar";
+  src: url("../fuentes/SourceSans3-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "fuente_estandar_italica";
+  src: url("../fuentes/SourceSans3-Italic-VariableFont_wght.ttf");
+}
+
+/*establecer tipografía general*/
+html {
+    font-family: "fuente_estandar", sans-serif;
+}
+
+/*Hacer que la cabecera no tenga bordes y ocupe todo su espacio*/
+body {
+  margin: 0;
+  padding: 0;
+  overflow: auto; /*quitar esto?? parece que no funciona*/
+}
+
+

@@ -11,12 +11,6 @@
   box-shadow: 0 3px 6px 0 rgba(50, 50, 50, 0.3);
 }
 
-/*Hacer que la cabecera no tenga bordes y ocupe todo su espacio*/
-body {
-  margin: 0;
-  padding: 0;
-}
-
 /*CENTRADOR DE LA CABECERA*/
 /*centra los elementos de que estan dentro del div de cabecera*/
 .centrador-cabecera {
@@ -35,7 +29,7 @@ body {
 /*CENTRADOR DE ELEMENTOS DEL NAV*/
 /*Aplica modificaciones al elemento NAV; fuente y tipografía, tamaño de línea y que esté alineado a la izquierda*/
 .centrador-cabecera nav {
-  font: 16px Arial, Helvetica, sans-serif;
+  font: 16px;
   line-height: 40px;
   float: left;
   margin: 0 0 0 75px;
