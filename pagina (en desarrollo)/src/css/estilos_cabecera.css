@@ -1,6 +1,8 @@
 /*BASE CABECERA*----------------------------------------------------------/
 /*crea la base de la cabecera*/
 .cabecera {
+  touch-action: none; /*evita que se pueda desplazar la cabecera con el dedo en pantallas tactiles*/
+  -ms-touch-action: none; /*idem*/
   background-color: #ffffff;
   box-shadow: 0 1px 1px #ccc;
   padding: 20px 40px;
