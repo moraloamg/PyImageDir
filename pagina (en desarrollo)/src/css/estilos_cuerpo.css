@@ -1,6 +1,6 @@
 /*establece el fondo de pantalla del cuerpo de la pagina*/
 .cuerpo-pagina {
-  overflow: hidden;
+  overflow: auto;
   width: 100vw;
   height: 100vh;
   z-index: -1;

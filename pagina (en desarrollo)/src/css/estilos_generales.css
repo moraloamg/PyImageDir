@@ -14,11 +14,14 @@ html {
     font-family: "fuente_estandar", sans-serif;
 }
 
+
 /*Hacer que la cabecera no tenga bordes y ocupe todo su espacio*/
 body {
   margin: 0;
   padding: 0;
   overflow: auto; /*quitar esto?? parece que no funciona*/
+  overflow-x: hidden; /* Esto bloquea el desplazamiento horizontal de header */
+  overflow-y: hidden; /*idem en vertical/
   /*direction: ltr;*/
 }
 
