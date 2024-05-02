@@ -1,90 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-/* POR HACER: TRACUCIR Y COMENTAR TODA ESTA HOJA DE ESTILOS*/
+/* Reglas generales para el pie de pagina (aplicables a este archivo)*/
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.main-section {
-    width: 100%;
-    text-align: center;
-    padding: 5rem 0;
+/* Reglas del pie de pagina */
+.pie-pagina {
+  display: flex;
+  color: #fffefe;
+  padding: 2rem 0 60px 0; /*relleno inferior , se pone asi porque si no, queda regular*/
+  height: auto;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: #000000;
+  margin-bottom: 50px; /*margen inferior, se pone asi porque si no, queda regular*/
 }
 
-.footer {
-    display: flex;
-    color: #fffefe;
-    padding: 2rem 0 60px 0; /*relleno inferior , se pone asi porque si no queda regular*/
-    height: auto;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    background-color: #000000;
-    margin-bottom: 50px; /*margen inferior, se pone asi porque si no queda regular*/
+/*contenedor que dispone los datos del pie de pagina, hay 3 en total*/
+.pie-pagina-contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
 }
 
-.box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
+.pie-pagina-enlaces h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
 }
 
-.footer h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
+.pie-pagina-enlaces li {
+  list-style: none;
+  line-height: 30px;
+  text-align: center;
+  font-weight: 100;
 }
 
-.links li {
-    list-style: none;
-    line-height: 30px;
-    text-align: center;
-    font-weight: 100;
+.pie-pagina-enlaces li a {
+  text-decoration: none;
+  color: #fff;
 }
 
-.links li a {
-    text-decoration: none;
-    color: #fff;
+/*estilos del formulario de registro*/
+.registro {
+  display: flex;
+  flex-direction: column;
 }
 
-.registration {
-    display: flex;
-    flex-direction: column;
+/*entrada de datos del formulario*/
+.registro input {
+  padding: 10px;
+  font-weight: 100;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+  margin: 1rem 0;
 }
 
-.registration input {
-    padding: 10px;
-    font-weight: 100;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 12px;
-    margin: 1rem 0;
+/*boton del formulario*/
+.pie-pagina button {
+  border: none;
+  padding: 12px 0;
+  border-radius: 30px;
+  cursor: pointer;
 }
 
-button {
-    border: none;
-    padding: 12px 0;
-    border-radius: 30px;
-    cursor: pointer;
+.direccion {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.address {
-    text-align: center;
-    margin-bottom: 10px;
+.redes-sociales {
+  display: flex;
+  list-style: none;
 }
 
-.social {
-    display: flex;
-    list-style: none;
-}
-
-.social li {
-    margin: 0 8px;
-    cursor: pointer;
-    font-size: 18px;
+.redes-sociales li {
+  margin: 0 8px;
+  cursor: pointer;
+  font-size: 18px;
 }
