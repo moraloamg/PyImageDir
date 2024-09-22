@@ -18,6 +18,8 @@ import shutil
 from datetime import datetime
 import numpy as np
 import cv2
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 __author__ = "Adrian Mateos"
 __copyright__ = "Copyright 2023"
@@ -272,7 +274,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
     #ponemos la extension en minusculas
     extension = extension.lower()
 
-    EXTENSIONES_ADMITIDAS = ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff"]
+    EXTENSIONES_ADMITIDAS = ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff", "svg"]
 
     #Comprobamos que la extension puesta por parametros esta entre las permitidas, en caso contrario, salimos
     if extension in EXTENSIONES_ADMITIDAS:
@@ -1316,18 +1318,92 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
-#TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
+
+def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
+    """
+    Función la cual combina en un pdf las imágenes halladas en un directorio.
+    Las paginas del pdf tomaran el mismo orden que tengan estas en el directorio.
+    Finalmente, las imágenes tratadas se dispondrán un directorio llamado 'pdf_imagenes_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - nombre_archivo (str): Nombre del archivo pdf.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - pdf con las imagenes, dentro del directorio con el nombre 'pdf_imagenes_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+
+        #obtenemos la nueva ruta donde guardaremos el pdf
+        nueva_ruta = preparar_directorio(ruta, "pdf_imagenes_py")
+
+        #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+        if nueva_ruta != None:
+            #contador que sirve para averiguar la cantidad de fotos que se han transformado
+            cont = 1
+
+            # Crear un objeto PDF
+            nombre_pdf = os.path.join(nueva_ruta, nombre_archivo + '.pdf')
+            pdf = canvas.Canvas(nombre_pdf, pagesize=letter)
+
+            #iteramos los archivos para transformarlos
+            for archivo in os.listdir(ruta):
+                #obtenemos la direccion completa de la imagen para poder tratarla
+                ruta_imagen = os.path.join(ruta, archivo)
+                
+                if ruta_imagen.endswith(".jpg") or ruta_imagen.endswith(".png"):
+                    try:
+                        # Cargar la imagen
+                        img = Image.open(ruta_imagen)
+
+                        # Obtener dimensiones de la imagen
+                        ancho, alto = img.size
+
+                        # Establecer el tamaño de la página según el tamaño de la imagen
+                        pdf.setPageSize((ancho, alto))
+
+                        # Dibujar la imagen en la página
+                        pdf.drawImage(ruta_imagen, 0, 0, ancho, alto)
+                        # Añadir la página al PDF
+                        pdf.showPage()  
+
+                        cont += 1
+                    except Exception as e:
+                        if aviso_fallos:
+                            print(f"Error procesando {archivo}: {e}")
+            pdf.save()
+
+            print(f'Proceso terminado, {str(cont-1)} imagenes insertadas en pdf de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
 
 #----------------------Fin del codigo---------------------------------
-ruta = r'C:\Users\Usuario\Desktop\aaa'
+ruta = r'C:\Users\Usuario\Desktop\aaaa'
 
 try:
-    recortar_varias_fotos(ruta,195, 195, 0, 108)
-    #redimensionar_varias_fotos(ruta,1345,1899)
+    varias_fotos_a_pdf(ruta,'partitura')
 except TypeError as e:
     print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
 
+
+#TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
+#TODO hacer funcion para transformar svg a png y viceversa
+
+#--------------------------------------------------------------------------
         
 #TODO mirar si se pueden poner en funciones partes del codigo que se repiten
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
