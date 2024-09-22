@@ -274,7 +274,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
     #ponemos la extension en minusculas
     extension = extension.lower()
 
-    EXTENSIONES_ADMITIDAS = ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff", "svg"]
+    EXTENSIONES_ADMITIDAS = ["jpg", "jpeg", "png", "bmp", "gif", "tif", "tiff"]
 
     #Comprobamos que la extension puesta por parametros esta entre las permitidas, en caso contrario, salimos
     if extension in EXTENSIONES_ADMITIDAS:
