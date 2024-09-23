@@ -11,7 +11,7 @@ tener en cuenta que en los comentarios no se puede poner la barra \ junto
 a un caracter),
 """
 
-from PIL import Image
+from PIL import Image, ImageDraw
 import os
 import imghdr
 import shutil
@@ -20,6 +20,7 @@ import numpy as np
 import cv2
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+import pyvips
 
 __author__ = "Adrian Mateos"
 __copyright__ = "Copyright 2023"
@@ -256,7 +257,6 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
     - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
     - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen con la extension cambiada.
     - extension (str): extension de la imagen, sólo son validos los siguiente valores: 'jpg', 'jpeg', 'png', 'bmp', 'gif', 'tif', 'tiff'.
-    - ancho (str): ancho de la imagen.
     - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. nombre 
     - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
       en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
@@ -1318,6 +1318,7 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
+#--------------revisar un poco el codigo a partir de aqui-------------
 
 def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
     """
@@ -1384,17 +1385,139 @@ def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
                     except Exception as e:
                         if aviso_fallos:
                             print(f"Error procesando {archivo}: {e}")
+            
+            #Guardamos el pdf con todos los datos y paginas creadas
             pdf.save()
 
             print(f'Proceso terminado, {str(cont-1)} imagenes insertadas en pdf de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
+
+#png a svg y svg a png
+def imagen_svg_a_png(ruta_origen:str, ruta_destino:str, nombre:str=None ,aviso:bool=True)->bool:
+    """
+    Función que transforma una imagen .svg a .png.
+
+    Parameters:
+    ----------
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen con la extension cambiada.
+    - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. nombre 
+    - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - (bool) True en caso de éxito, False en caso de fracaso más un mensaje de error.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta_origen = os.path.normpath(ruta_origen)
+    ruta_destino = os.path.normpath(ruta_destino)
+
+    #Comprobamos que existe la ruta y que el archivo es un .svg
+    if os.path.isfile(ruta_origen) and os.path.splitext(ruta_origen)[1].lower() == '.svg':
+        try:
+            #Comprobamos que existe la ruta que guarda las imagenes
+            if os.path.isdir(ruta_destino):
+                #En caso de que el alto no se disponga por parametro, la imagen se reescalara con proporcion simetrica,
+                #en caso contrario, el reescalado obedecera a los parametros indicados por el usuario 
+
+                #En caso de que no hayamos dado ningun nombre, podremos el que tenia
+                if nombre == None:
+                    nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
+                
+
+                #Extraemos y anadimos la extension original a la nueva foto
+                extension_original = os.path.splitext(ruta_origen)[1]
+                nombre = f"{nombre}{extension_original}"
+
+                #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
+                #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
+                nombre = comprobar_duplicadas(ruta_destino, nombre)
+
+                
+
+                ############EN CONSTRUCCION####################
+                #NO FUNCIONA; MIRAR ENLACES: https://github.com/8ctopotamus/svg-to-png-converter-python/blob/main/helpers.py
+
+                image = pyvips.Image.new_from_file(ruta_origen, dpi=300)
+                image.write_to_file(os.path.join(ruta_destino, nombre))
+
+                return True
+            else:
+                if aviso:
+                    print(f'La ruta {ruta_destino} no corresponde a un directorio o esta corrupta')
+                return False  
+            
+        except Exception as e:
+            print(f'Ha ocurrido un error al transformar a PNG el archivo SVG: {e}')
+            return False
+    else:
+        if aviso:
+            print(f'La ruta {ruta_origen} no corresponde a un .svg o esta corrupta')
+        return False
+    
+
+def imagenes_svg_a_png(ruta:str, numeracion_auto=False, aviso_fallos=False):
+    """
+    Función la cual convierte imagenes vectoriales SVG de un directorio en PNG
+    Finalmente, las imágenes tratadas se dispondrán un directorio llamado 'img_PNG_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - ancho (int): ancho de la imagen.
+    - alto (int): alto de la imagen, None o vacio por defecto, no es necesario indicar éste parametro si se pretende
+      hacer un reescalado simétrico de la imagen.
+    - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - Imágenes tratadas, dentro del directorio con el nombre 'img_PNG_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+
+        #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
+        nueva_ruta = preparar_directorio(ruta, "img_PNG_py")
+
+        #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+        if nueva_ruta != None:
+            #contador que sirve para averiguar la cantidad de fotos que se han transformado
+            cont = 1
+
+            #iteramos los archivos para transformarlos
+            for archivo in os.listdir(ruta):
+                #obtenemos la direccion completa de la imagen para poder tratarla
+                ruta_imagen = os.path.join(ruta, archivo)
+                
+                #creamos el nombre del archivo
+                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+
+                if imagen_svg_a_png(ruta_imagen,nueva_ruta,nombre=nombre_archivo,aviso=aviso_fallos):
+                    cont += 1
+
+            print(f'Proceso terminado, {str(cont-1)} SVG tratados de {contar_imagenes_en_directorio(ruta)} SVG encontrados')        
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
+
 #----------------------Fin del codigo---------------------------------
-ruta = r'C:\Users\Usuario\Desktop\aaaa'
+ruta = r'C:\Users\Usuario\Desktop\aaa'
 
 try:
-    varias_fotos_a_pdf(ruta,'partitura')
+    imagenes_svg_a_png(ruta)
 except TypeError as e:
     print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
