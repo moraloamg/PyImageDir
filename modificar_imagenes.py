@@ -11,16 +11,18 @@ tener en cuenta que en los comentarios no se puede poner la barra \ junto
 a un caracter),
 """
 
-from PIL import Image, ImageDraw
+from PIL import Image
 import os
 import imghdr
 import shutil
 from datetime import datetime
 import numpy as np
 import cv2
+#Librerias para pdf
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-import pyvips
+#Librerias para SVG
+import aspose.words as aw
 
 __author__ = "Adrian Mateos"
 __copyright__ = "Copyright 2023"
@@ -121,8 +123,8 @@ def contar_imagenes_en_directorio(directorio:str)->int:
         for archivo in os.listdir(directorio):
             #Creamos la direccion completa
             ruta_archivo = os.path.join(directorio, archivo)
-            #Nos aseguramos bien de que el archivo sea una imagen, integra y sin corromper
-            if os.path.isfile(ruta_archivo) and imghdr.what(ruta_archivo):
+            #Nos aseguramos bien de que el archivo sea una imagen, integra y sin corromper (tambien si es SVG)
+            if os.path.isfile(ruta_archivo) and imghdr.what(ruta_archivo) or os.path.isfile(ruta_archivo) and ruta_archivo.lower().endswith('.svg'):
                 contador += 1
     
     return contador
@@ -1318,7 +1320,7 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
-#--------------revisar un poco el codigo a partir de aqui-------------
+#-------------- TODO revisar un poco el codigo a partir de aqui-------------
 
 def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
     """
@@ -1394,15 +1396,14 @@ def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
         print('El directorio introducido por parametro no existe o no es un directorio')
 
 
-#png a svg y svg a png
 def imagen_svg_a_png(ruta_origen:str, ruta_destino:str, nombre:str=None ,aviso:bool=True)->bool:
     """
     Función que transforma una imagen .svg a .png.
 
     Parameters:
     ----------
-    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
-    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen con la extension cambiada.
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen SVG.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen transformada a PNG.
     - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. nombre 
     - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
       en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
@@ -1429,21 +1430,31 @@ def imagen_svg_a_png(ruta_origen:str, ruta_destino:str, nombre:str=None ,aviso:b
                     nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
                 
 
-                #Extraemos y anadimos la extension original a la nueva foto
-                extension_original = os.path.splitext(ruta_origen)[1]
-                nombre = f"{nombre}{extension_original}"
+                #Extraemos y anadimos la nueva extension, en este caso .png, a la foto
+                extension_nueva = ".png"
+                nombre = f"{nombre}{extension_nueva}"
 
                 #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                 #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
                 nombre = comprobar_duplicadas(ruta_destino, nombre)
 
-                
+                #aqui se utiliza la libreria aspose.words
+                #cargar el documento
+                doc = aw.Document()
+                builder = aw.DocumentBuilder(doc)
 
-                ############EN CONSTRUCCION####################
-                #NO FUNCIONA; MIRAR ENLACES: https://github.com/8ctopotamus/svg-to-png-converter-python/blob/main/helpers.py
+                #insertar la imagen SVG
+                shape = builder.insert_image(ruta_origen)
 
-                image = pyvips.Image.new_from_file(ruta_origen, dpi=300)
-                image.write_to_file(os.path.join(ruta_destino, nombre))
+                #crear opciones de guardado con mayor calidad
+                options = aw.saving.ImageSaveOptions(aw.SaveFormat.PNG)
+
+                #establecer resoluciones horizontal y vertical (en DPI)
+                options.horizontal_resolution = 300  # Resolución horizontal
+                options.vertical_resolution = 300    # Resolución vertical
+
+                #guardar la imagen
+                shape.get_shape_renderer().save(os.path.join(ruta_destino, nombre), options)
 
                 return True
             else:
@@ -1524,7 +1535,6 @@ except TypeError as e:
 
 
 #TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
-#TODO hacer funcion para transformar svg a png y viceversa
 
 #--------------------------------------------------------------------------
         
