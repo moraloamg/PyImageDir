@@ -1535,6 +1535,8 @@ except TypeError as e:
 
 
 #TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
+#Un ejemplo: https://www.youtube.com/watch?v=Fl5vBmjWNIo&list=PL3K-A0oIjFzPKW-YYiSAz-WPjGShbjDsm&index=9
+
 
 #--------------------------------------------------------------------------
         
