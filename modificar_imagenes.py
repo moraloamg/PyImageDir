@@ -13,7 +13,6 @@ a un caracter),
 
 from PIL import Image
 import os
-import imghdr
 import shutil
 from datetime import datetime
 import numpy as np
@@ -23,6 +22,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 #Librerias para SVG
 import aspose.words as aw
+#Libreria para borrar el fondo de una imagen
+from rembg import remove
 
 __author__ = "Adrian Mateos"
 __copyright__ = "Copyright 2023"
@@ -32,6 +33,26 @@ __version__ = "1.1"
 __maintainer__ = ""
 __email__ = "https://github.com/moraloamg"
 __status__ = "Development"
+
+
+def imgvld(ruta:str):
+    """
+    Función que comprueba si un archivo es una imagen válida y sin corromper.
+
+    Parameters:
+    ----------
+    - ruta (str): ruta de la imagen.
+
+    Returns:
+    --------
+    - (bool): True si es una imagen, False si no lo es o es una imagen corrupta.
+    """
+    try:
+        with Image.open(ruta) as img:
+            img.verify()  # Verifica que el archivo sea una imagen válida
+        return True
+    except (IOError, SyntaxError) as e:
+        return False
 
 
 def poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
@@ -124,7 +145,7 @@ def contar_imagenes_en_directorio(directorio:str)->int:
             #Creamos la direccion completa
             ruta_archivo = os.path.join(directorio, archivo)
             #Nos aseguramos bien de que el archivo sea una imagen, integra y sin corromper (tambien si es SVG)
-            if os.path.isfile(ruta_archivo) and imghdr.what(ruta_archivo) or os.path.isfile(ruta_archivo) and ruta_archivo.lower().endswith('.svg'):
+            if os.path.isfile(ruta_archivo) and imgvld(ruta_archivo) or os.path.isfile(ruta_archivo) and ruta_archivo.lower().endswith('.svg'):
                 contador += 1
     
     return contador
@@ -152,7 +173,7 @@ def preparar_directorio(ruta: str, nombre:str)->str:
     #si no existe, crearemos el directorio
     if os.path.exists(nueva_ruta):
         # Pregunta al usuario si desea eliminar los directorios anidados
-        respuesta = input(f"El directorio '{nueva_ruta}' ya existe. ¿Deseas borrarlo y su contenido? (s/n): ") #TODO esto se podria cambiar cuando no haya entrada de teclado
+        respuesta = input(f"El directorio '{nueva_ruta}' ya existe. ¿Deseas borrarlo y su contenido? Si no lo elimina se cancelará la operación (s/n): ") #TODO esto se podria cambiar cuando no haya entrada de teclado
         
         if respuesta.lower() == 's':
             try:
@@ -199,7 +220,7 @@ def redimensionar_foto(ruta_origen:str, ruta_destino:str, ancho:int, alto:int=No
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -244,7 +265,7 @@ def redimensionar_foto(ruta_origen:str, ruta_destino:str, ancho:int, alto:int=No
             print(f'Ha ocurrido un error al redimensionar la imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
     
@@ -282,7 +303,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
     if extension in EXTENSIONES_ADMITIDAS:
 
         #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-        if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+        if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
             try:
                 with Image.open(ruta_origen) as imagen:
 
@@ -322,7 +343,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
                 print(f'Ha ocurrido un error al cambiar la extension de la imagen: {e}')
                 return False
         else:
-            if aviso:
+            if aviso and not os.path.isdir(ruta_origen):
                 print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
             return False
     else:
@@ -471,7 +492,7 @@ def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=
 
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -507,7 +528,7 @@ def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=
             print(f'Ha ocurrido un error al comprimir imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
     
@@ -591,10 +612,10 @@ def anadir_marca_de_agua(ruta_origen:str, ruta_destino:str, ruta_marca_agua:str,
     ruta_marca_agua = os.path.normpath(ruta_marca_agua)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
     
         #Comprobamos que existe la ruta de la marca de agua
-        if os.path.isfile(ruta_marca_agua) and imghdr.what(ruta_marca_agua):
+        if os.path.isfile(ruta_marca_agua) and imgvld(ruta_marca_agua):
 
             #Comprobamos que existe la ruta que guarda las imagenes
             if os.path.isdir(ruta_destino):
@@ -677,7 +698,7 @@ def anadir_marca_de_agua(ruta_origen:str, ruta_destino:str, ruta_marca_agua:str,
                 print(f'La ruta {ruta_marca_agua} no corresponde a una foto o esta corrupta')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
 
@@ -774,7 +795,7 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -815,7 +836,7 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
             print(f'Ha ocurrido un error al rotar la imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
 
@@ -900,7 +921,7 @@ def voltear_imagen(ruta_origen:str, ruta_destino:str, direccion:int, nombre:str=
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -946,7 +967,7 @@ def voltear_imagen(ruta_origen:str, ruta_destino:str, direccion:int, nombre:str=
             print(f'Ha ocurrido un error al voltear la imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
 
@@ -1080,7 +1101,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -1116,7 +1137,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
             print(f'Ha ocurrido un error al voltear la imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
 
@@ -1173,7 +1194,6 @@ def recortar_varios_bordes_negros(ruta:str, numeracion_auto=False, aviso_fallos=
         print('El directorio introducido por parametro no existe o no es un directorio')
 
 
-#----------------------------En proceso---------------------------------------------------------
 
 
 def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_izq:int=0, margen_sup:int=0, margen_inf:int=0, nombre:str=None, aviso:bool=True)->bool:
@@ -1204,7 +1224,7 @@ def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_iz
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imghdr.what(ruta_origen):
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -1251,7 +1271,7 @@ def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_iz
             print(f'Ha ocurrido un error al recortar la imagen: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
         return False
     
@@ -1466,7 +1486,7 @@ def imagen_svg_a_png(ruta_origen:str, ruta_destino:str, nombre:str=None ,aviso:b
             print(f'Ha ocurrido un error al transformar a PNG el archivo SVG: {e}')
             return False
     else:
-        if aviso:
+        if aviso and not os.path.isdir(ruta_origen):
             print(f'La ruta {ruta_origen} no corresponde a un .svg o esta corrupta')
         return False
     
@@ -1481,9 +1501,6 @@ def imagenes_svg_a_png(ruta:str, numeracion_auto=False, aviso_fallos=False):
     Parameters:
     ----------
     - ruta (str): Ruta del directorio que contiene las imágenes.
-    - ancho (int): ancho de la imagen.
-    - alto (int): alto de la imagen, None o vacio por defecto, no es necesario indicar éste parametro si se pretende
-      hacer un reescalado simétrico de la imagen.
     - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
     - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
       en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
@@ -1524,43 +1541,161 @@ def imagenes_svg_a_png(ruta:str, numeracion_auto=False, aviso_fallos=False):
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
+
+def borrar_fondo_foto(ruta_origen:str, ruta_destino:str, nombre:str=None, aviso:bool=True)->bool:
+    """
+    Función que borra el fondo de una imagen, muy útil para quitar el fondo blanco de un retrato.
+
+    Parameters:
+    ----------
+    - ruta_origen (str): Ruta del directorio donde se encuentra la imagen.
+    - ruta_destino (str): nombre del directorio de destino donde se guardara la imagen redimensionada.
+    - nombre (str): None por defecto. Nombre (sin extension) en caso de que queramos renombrar la imagen. 
+    - aviso (bool): True por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+
+    Returns:
+    --------
+    - (bool) True en caso de exito, False en caso de fracaso más un mensaje de error.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta_origen = os.path.normpath(ruta_origen)
+    ruta_destino = os.path.normpath(ruta_destino)
+
+    #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
+    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+        try:
+            #Comprobamos que existe la ruta que guarda las imagenes
+            if os.path.isdir(ruta_destino):
+
+                with open(ruta_origen, "rb") as entrada_imagen:
+
+                    #leemos la imagen
+                    imagen = entrada_imagen.read()
+                    imagen_sin_fondo = remove(imagen)
+                    
+
+                    #En caso de que no hayamos dado ningun nombre, podremos el que tenia
+                    if nombre == None:
+                        nombre = os.path.splitext(os.path.basename(ruta_origen))[0]
+                    
+
+                    #Extraemos y anadimos la extension original a la nueva foto
+                    extension_original = os.path.splitext(ruta_origen)[1]
+                    nombre = f"{nombre}{extension_original}"
+
+                    #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
+                    #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
+                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+
+
+                    #Convertir al modo RGB si es RGBA, es decir, si tiene canal Alpha y hay transparencia,
+                    #ya que el formato JPEG o JPG no puede guardar datos en modo RGBA, por ende, quitamos la transparencia
+                    #Guardamos la imagen en la nueva ruta y aumentamos el contador, utilizamos os.path.join para evitar
+                    #problemas con la barra '\'
+
+                    nombre_definitivo = os.path.join(ruta_destino, nombre)
+
+                with open(nombre_definitivo, "wb") as salida_final:
+                    salida_final.write(imagen_sin_fondo)
+
+                    return True
+
+            else:
+                if aviso:
+                    print(f'La ruta {ruta_destino} no corresponde a un directorio o esta corrupta')
+                return False 
+            
+        except Exception as e:
+            print(f'Ha ocurrido un error al borrar el fondo de la imagen: {e}')
+            return False
+    else:
+        if aviso and not os.path.isdir(ruta_origen):
+            print(f'La ruta {ruta_origen} no corresponde a una foto o esta corrupta')
+        return False
+    
+
+
+def borrar_fondo_varias_fotos(ruta:str, numeracion_auto=False, aviso_fallos=False):
+    """
+    Función que borra el fondo de las imagenes halladas en un directorio, muy útil para quitar el fondo
+    blanco de un retrato.
+    Finalmente, las imágenes tratadas se dispondrán un directorio llamado 'img_sin_fondo_py' dentro del
+    original dispuesto. En caso de existir ya el directorio, se preguntará si se desea elminiarlo, de manera recursiva,
+    para crear otro posteriormente.
+
+    Parameters:
+    ----------
+    - ruta (str): Ruta del directorio que contiene las imágenes.
+    - numeracion_auto (bool): False por defecto. Numeracion automatica de los archivos.
+    - aviso_fallos (bool): False por defecto. Variable que muestra fallos de excepción del tratado de cada foto
+      en caso de que ocurran, ideal en caso de que la función no funcione correctamente.
+
+    Returns:
+    --------
+    - Imágenes tratadas, dentro del directorio con el nombre 'img_sin_fondo_py' que estará contenido en la
+      carpeta origen que hayamos indicado.
+      En caso de error se mostrarán mensajes por consola.
+    """
+
+    #Normalizamos las rutas en caso de que no esten normalizadas
+    ruta = os.path.normpath(ruta)
+
+    #comprobamos que existe la ruta y que es un directorio
+    if os.path.exists(ruta) and os.path.isdir(ruta):
+
+        #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
+        nueva_ruta = preparar_directorio(ruta, "img_sin_fondo_py")
+
+        #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
+        if nueva_ruta != None:
+            #contador que sirve para averiguar la cantidad de fotos que se han transformado
+            cont = 1
+
+            #iteramos los archivos para transformarlos
+            for archivo in os.listdir(ruta):
+                #obtenemos la direccion completa de la imagen para poder tratarla
+                ruta_imagen = os.path.join(ruta, archivo)
+                
+                #creamos el nombre del archivo
+                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+
+                if borrar_fondo_foto(ruta_imagen,nueva_ruta,nombre=nombre_archivo,aviso=aviso_fallos):
+                    cont += 1
+
+            print(f'Proceso terminado, {str(cont-1)} imagenes sin fondo de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
+
+    else:
+        print('El directorio introducido por parametro no existe o no es un directorio')
+
 #----------------------Fin del codigo---------------------------------
 ruta = r'C:\Users\Usuario\Desktop\aaa'
 
 try:
-    imagenes_svg_a_png(ruta)
+    borrar_fondo_varias_fotos(ruta)
 except TypeError as e:
     print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
 
-
-#TODO hacer funcion de eliminar fondo (si el fondo el blanco o negro o muy cercano a este)
-#Un ejemplo: https://www.youtube.com/watch?v=Fl5vBmjWNIo&list=PL3K-A0oIjFzPKW-YYiSAz-WPjGShbjDsm&index=9
-
-
 #--------------------------------------------------------------------------
         
-#TODO mirar si se pueden poner en funciones partes del codigo que se repiten
+#TODO instalar requerimientos automaticamente
+
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
 #TODO ¿Mirar velocidad de ejecucion y optimizar aquello que se pueda (poner funciones para aquellos trozos que se repitan?
         
 #TODO Que el directorio de salida no se encuentre en el directorio de entrada (Que el directorio se proporcione de manera independiente, esto se hará cuando esté listo el lado del cliente)
         
-#TODO poner logs y hacer un fichero para guardarlos?
 #TODO Manipular rutas con pathlib?
 
 #TODO poner if __name__ == '__main__' en caso de que ponga el uso por consola aquí más abajo?
 
 #TODO ¿Comprobar que el directorio no esta vacio antes de trabajar con el?¿Hacerlo en el lado del cliente?
-#TODO ¿Ver maneras de poner un método privado?
 
 #TODO (En un mismo script o clase) Orden -> funciones independientes (las de arriba), funciones dependientes (las de abajo)
-#Se han de usar en las apis las funciones dependientes (las tochas) ¿Buscar algun modo de hacer publicas las que se vayan a usar y privadas las que no?¿utilizar alguna convencion o libreria?
 
-#TODO ¿mostrar salida por consola de algún tipo para ver el progreso de tratado de las fotos?
-#TODO ¿hacer versión web y versión de escritorio?
-
-#TODO si hago una versión web tendré que hacer una API que haga de intermediario.
 
 
 
