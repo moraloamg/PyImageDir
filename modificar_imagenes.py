@@ -1680,7 +1680,9 @@ except TypeError as e:
 
 
 #--------------------------------------------------------------------------
-        
+
+#TODO poner nomeclatura funciones privadas con _ delante de la función
+
 #TODO instalar requerimientos automaticamente
 
 #TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)

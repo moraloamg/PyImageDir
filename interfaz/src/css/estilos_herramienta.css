@@ -1,0 +1,147 @@
+/* Estilos para el panel del formulario */
+.panel-formulario {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+/* Estilos para el formulario */
+.formulario-herramienta {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para los campos del formulario */
+.campo-formulario {
+  margin-bottom: 15px;
+}
+
+.campo-formulario label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.campo-formulario input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Estilos para el despliege de checkboxes */
+.dropdown {
+  width: 200px;
+  cursor: pointer;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px; /* Puedes mantener el padding, pero ajustar el padding-left */
+  padding-left: 5px; /* Reduce el espacio a la izquierda */
+  border: none; /* Eliminamos el borde */
+}
+
+.arrow {
+  font-size: 12px;
+  margin-left: 8px; /* Ajustamos el espacio entre el texto y la flechita */
+}
+
+.dropdown-content {
+  display: none;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+/* Estilos para los checkboxes */
+.campo-formulario.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.campo-formulario.checkbox label {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+.campo-formulario.checkbox label {
+  margin-left: 10px;
+  font-weight: normal;
+}
+
+/* Tamaño de la fuente de los checkboxes */
+.campo-formulario.checkbox label {
+  font-size: 14px; /* Ajusta este valor al tamaño que desees */
+}
+
+/* Estilos para el botón Abrir carpeta */
+.boton-abrir-carpeta {
+  background-color: #20b2aa;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+
+.boton-abrir-carpeta:hover {
+  background-color: #1c9591;
+}
+
+/* Estilos para el botón Enviar */
+.boton-formulario {
+  background-color: #20b2aa;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.boton-formulario:hover {
+  background-color: #1c9591;
+}
+
+/* Estilos responsivos */
+@media (max-width: 480px) {
+  .panel-formulario {
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .campo-formulario input[type="text"] {
+    font-size: 16px; /* Aumentar tamaño de fuente para dispositivos móviles */
+  }
+
+  .boton-formulario,
+  .boton-abrir-carpeta {
+    width: 100%; /* Hacer que los botones ocupen todo el ancho en dispositivos móviles */
+  }
+}
+
+/* Estilo para el contenedor del botón y la ruta */
+.contenedor-boton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Estilo para el recuadro de la ruta */
+#rutaCarpeta {
+  font-size: 14px;
+  color: #333;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  align-self: flex-start;
+}
