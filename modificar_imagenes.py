@@ -35,7 +35,7 @@ __email__ = "https://github.com/moraloamg"
 __status__ = "Development"
 
 
-def imgvld(ruta:str):
+def _imgvld(ruta:str):
     """
     Función que comprueba si un archivo es una imagen válida y sin corromper.
 
@@ -55,7 +55,7 @@ def imgvld(ruta:str):
         return False
 
 
-def poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
+def _poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
     """
     Función que anade un indice a un archivo, ambos enviados por parámetro
     en caso de que la activacion sea True, por ejemplo; imagen_Nº_3
@@ -86,7 +86,7 @@ def poner_indice_imagenes(activacion:bool, nombre:str, indice:int)->str:
     return nombre_archivo
 
 
-def comprobar_duplicadas(ruta_directorio:str, nombre_archivo:str)->str:
+def _comprobar_duplicadas(ruta_directorio:str, nombre_archivo:str)->str:
     """
     Función que comprueba si un archivo se llama igual que otro y lo
     renombra con la fecha, hora, segundos y milisegundos actuales en caso de que esté
@@ -122,7 +122,7 @@ def comprobar_duplicadas(ruta_directorio:str, nombre_archivo:str)->str:
 
 
 
-def contar_imagenes_en_directorio(directorio:str)->int:
+def _contar_imagenes_en_directorio(directorio:str)->int:
     """
     Función que cuenta las imágenes que hay en un directorio.
     Esta función está disenada para usarse dentro de otras funciones
@@ -145,13 +145,13 @@ def contar_imagenes_en_directorio(directorio:str)->int:
             #Creamos la direccion completa
             ruta_archivo = os.path.join(directorio, archivo)
             #Nos aseguramos bien de que el archivo sea una imagen, integra y sin corromper (tambien si es SVG)
-            if os.path.isfile(ruta_archivo) and imgvld(ruta_archivo) or os.path.isfile(ruta_archivo) and ruta_archivo.lower().endswith('.svg'):
+            if os.path.isfile(ruta_archivo) and _imgvld(ruta_archivo) or os.path.isfile(ruta_archivo) and ruta_archivo.lower().endswith('.svg'):
                 contador += 1
     
     return contador
     
     
-def preparar_directorio(ruta: str, nombre:str)->str:
+def _preparar_directorio(ruta: str, nombre:str)->str:
     """
     Función mediante la cual se crea el directorio que guardará archivos. Esta función no se puede
     usar por si sóla, sino dentro de otra función, como es el caso de 'redimensionar'.
@@ -220,7 +220,7 @@ def redimensionar_foto(ruta_origen:str, ruta_destino:str, ancho:int, alto:int=No
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -248,7 +248,7 @@ def redimensionar_foto(ruta_origen:str, ruta_destino:str, ancho:int, alto:int=No
 
                     #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                     #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+                    nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                     #Convertir al modo RGB si es RGBA, es decir, si tiene canal Alpha y hay transparencia,
                     #ya que el formato JPEG o JPG no puede guardar datos en modo RGBA, por ende, quitamos la transparencia
@@ -303,7 +303,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
     if extension in EXTENSIONES_ADMITIDAS:
 
         #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-        if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+        if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
             try:
                 with Image.open(ruta_origen) as imagen:
 
@@ -324,7 +324,7 @@ def transformar_extension_imagen(ruta_origen:str, ruta_destino:str, extension:st
                         #si no esta duplicado se deja igual
                         #el parametro nombre_archivo (futuro nombre) de la siguiente funcion ha de tener la extension para
                         #funcionar correctamente
-                        nombre = comprobar_duplicadas(ruta_destino, futuro_nombre)
+                        nombre = _comprobar_duplicadas(ruta_destino, futuro_nombre)
                         #quitamos la extension y extraemos el nombre, ya que la extension la cambiaremos despues
                         nombre = os.path.splitext(nombre)[0]
 
@@ -386,7 +386,7 @@ def redimensionar_varias_fotos(ruta:str, ancho:int, alto:int=None, numeracion_au
         #Comprobamos que las medidas que se introducen son adecuadas
         if (type(ancho) == int and ancho > 5) and ((type(alto) == int and alto > 5) or alto is None):
             #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-            nueva_ruta = preparar_directorio(ruta, "img_redimensionadas_py")
+            nueva_ruta = _preparar_directorio(ruta, "img_redimensionadas_py")
 
             #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
             if nueva_ruta != None:
@@ -399,12 +399,12 @@ def redimensionar_varias_fotos(ruta:str, ancho:int, alto:int=None, numeracion_au
                     ruta_imagen = os.path.join(ruta, archivo)
                     
                     #creamos el nombre del archivo
-                    nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                    nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
 
                     if redimensionar_foto(ruta_imagen,nueva_ruta,ancho,alto,nombre=nombre_archivo,aviso=aviso_fallos):
                         cont += 1
 
-                print(f'Proceso terminado, {str(cont-1)} imagenes redimensionadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
+                print(f'Proceso terminado, {str(cont-1)} imagenes redimensionadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
         else:
             print('Los parametros ancho y alto deben ser numeros enteros y ambos mayores que 5')
     else:
@@ -443,7 +443,7 @@ def modificar_extensiones_imagenes(ruta:str, extension:str, numeracion_auto=Fals
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-        nueva_ruta = preparar_directorio(ruta,'img_transformadas_py')
+        nueva_ruta = _preparar_directorio(ruta,'img_transformadas_py')
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -456,12 +456,12 @@ def modificar_extensiones_imagenes(ruta:str, extension:str, numeracion_auto=Fals
                 ruta_imagen = os.path.join(ruta, archivo)
 
                 #creamos el nombre del archivo
-                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
                 
                 if transformar_extension_imagen(ruta_imagen,nueva_ruta,extension,nombre_archivo,aviso_fallos):
                     cont = cont + 1
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes modificadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
+            print(f'Proceso terminado, {str(cont-1)} imagenes modificadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
     
@@ -492,7 +492,7 @@ def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=
 
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -511,7 +511,7 @@ def comprimir_imagen(ruta_origen:str, ruta_destino:str, calidad:int, nombre:str=
                     #si no esta duplicado se deja igual
                     #el parametro nombre_archivo (nombre) de la siguiente funcion ha de tener la extension para
                     #funcionar correctamente
-                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+                    nombre = _comprobar_duplicadas(ruta_destino, nombre)
                   
                     #combinamos la ruta del directorio de destino con el nombre del archivo que hemos dado por parametro
                     ruta_destino = os.path.join(ruta_destino, nombre)
@@ -562,7 +562,7 @@ def comprimir_varias_imagenes(ruta:str, calidad:int, numeracion_auto=False, avis
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-        nueva_ruta = preparar_directorio(ruta,'img_comprimidas_py')
+        nueva_ruta = _preparar_directorio(ruta,'img_comprimidas_py')
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -575,12 +575,12 @@ def comprimir_varias_imagenes(ruta:str, calidad:int, numeracion_auto=False, avis
                 ruta_imagen = os.path.join(ruta, archivo)
 
                 #creamos el nombre del archivo
-                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
                 
                 if comprimir_imagen(ruta_imagen,nueva_ruta,calidad,nombre_archivo,aviso_fallos):
                     cont = cont + 1
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes comprimidas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
+            print(f'Proceso terminado, {str(cont-1)} imagenes comprimidas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
@@ -612,10 +612,10 @@ def anadir_marca_de_agua(ruta_origen:str, ruta_destino:str, ruta_marca_agua:str,
     ruta_marca_agua = os.path.normpath(ruta_marca_agua)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
     
         #Comprobamos que existe la ruta de la marca de agua
-        if os.path.isfile(ruta_marca_agua) and imgvld(ruta_marca_agua):
+        if os.path.isfile(ruta_marca_agua) and _imgvld(ruta_marca_agua):
 
             #Comprobamos que existe la ruta que guarda las imagenes
             if os.path.isdir(ruta_destino):
@@ -668,7 +668,7 @@ def anadir_marca_de_agua(ruta_origen:str, ruta_destino:str, ruta_marca_agua:str,
                                 #si no esta duplicado se deja igual
                                 #el parametro nombre_archivo (nombre) de la siguiente funcion ha de tener la extension para
                                 #funcionar correctamente
-                                nombre = comprobar_duplicadas(ruta_destino, nombre)
+                                nombre = _comprobar_duplicadas(ruta_destino, nombre)
                             
                                 #combinamos la ruta del directorio de destino con el nombre del archivo que hemos dado por parametro
                                 ruta_destino = os.path.join(ruta_destino, nombre)
@@ -741,7 +741,7 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
             if os.path.exists(ruta) and os.path.isdir(ruta):
 
                 #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-                nueva_ruta = preparar_directorio(ruta,'img_marcadas_agua_py')
+                nueva_ruta = _preparar_directorio(ruta,'img_marcadas_agua_py')
 
                 #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
                 if nueva_ruta != None:
@@ -754,13 +754,13 @@ def marcar_agua_varias_imagenes(ruta:str, ruta_marca_agua:str, dimensiones_marca
                         ruta_imagen = os.path.join(ruta, archivo)
 
                         #creamos el nombre del archivo
-                        nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                        nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
                         
                         #Ojo! cuidado con el orden de los parametros, aqui 'aviso' tiene que ser indicado con 'aviso_fallos'
                         if anadir_marca_de_agua(ruta_imagen, nueva_ruta, ruta_marca_agua, dimensiones_marca, nombre_archivo, transparencia=transparencia_imagenes, aviso=aviso_fallos):
                             cont = cont + 1
 
-                    print(f'Proceso terminado, {str(cont-1)} imagenes marcadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
+                    print(f'Proceso terminado, {str(cont-1)} imagenes marcadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')         
             else:
                 print('El directorio introducido por parametro no existe o no es un directorio')
         else:
@@ -795,7 +795,7 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -817,7 +817,7 @@ def rotar_imagen(ruta_origen:str, ruta_destino:str, grados:int, nombre:str=None,
 
                         #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                         #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                        nombre = comprobar_duplicadas(ruta_destino, nombre)
+                        nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                         #Guardamos la nueva imagen
                         nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
@@ -873,7 +873,7 @@ def rotar_varias_imagenes(ruta:str, grados:int, numeracion_auto=False, aviso_fal
         if grados in ANGULOS_PERMITIDOS:
 
             #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-            nueva_ruta = preparar_directorio(ruta,'img_rotadas_py')
+            nueva_ruta = _preparar_directorio(ruta,'img_rotadas_py')
 
             #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
             if nueva_ruta != None:
@@ -886,12 +886,12 @@ def rotar_varias_imagenes(ruta:str, grados:int, numeracion_auto=False, aviso_fal
                     ruta_imagen = os.path.join(ruta, archivo)
 
                     #creamos el nombre del archivo
-                    nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                    nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
                     
                     if rotar_imagen(ruta_imagen,nueva_ruta,grados,nombre_archivo,aviso_fallos):
                         cont = cont + 1
 
-                print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas') 
+                print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas') 
         else:      
             print(f'El ángulo {grados}, no es válido, solo son válidos los ángulos 90, -90 y 180')                
     else:
@@ -921,7 +921,7 @@ def voltear_imagen(ruta_origen:str, ruta_destino:str, direccion:int, nombre:str=
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -948,7 +948,7 @@ def voltear_imagen(ruta_origen:str, ruta_destino:str, direccion:int, nombre:str=
 
                         #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                         #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                        nombre = comprobar_duplicadas(ruta_destino, nombre)
+                        nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                         #Guardamos la nueva imagen
                         nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
@@ -1002,7 +1002,7 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
 
         if direccion in [1,2]:
             #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-            nueva_ruta = preparar_directorio(ruta,'img_invertidas_py')
+            nueva_ruta = _preparar_directorio(ruta,'img_invertidas_py')
 
             #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
             if nueva_ruta != None:
@@ -1015,12 +1015,12 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
                     ruta_imagen = os.path.join(ruta, archivo)
 
                     #creamos el nombre del archivo
-                    nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                    nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
                     
                     if voltear_imagen(ruta_imagen,nueva_ruta,direccion,nombre_archivo,aviso_fallos):
                         cont = cont + 1
 
-                print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas') 
+                print(f'Proceso terminado, {str(cont-1)} imagenes rotadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas') 
         else:      
             print("El parametro direccion debe de ser 1, para volteo horizontal o 2, para volteo vertical")                 
     else:
@@ -1028,7 +1028,7 @@ def voltear_varias_imagenes(ruta:str, direccion:int, numeracion_auto=False, avis
 
 
 
-def algoritmo_cortar_bordes(imagen_con_bordes:Image):
+def _algoritmo_cortar_bordes(imagen_con_bordes:Image):
     """
     Función que contiene un algoritmo para detectar y recortar bordes negros de una imagen.
 
@@ -1101,7 +1101,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -1109,7 +1109,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
                 if os.path.isdir(ruta_destino):
                         
                         #el formato de salida es un numpy.ndarray, y hay que pasarlo a Image con .fromarray
-                        nueva_imagen = Image.fromarray(algoritmo_cortar_bordes(imagen))
+                        nueva_imagen = Image.fromarray(_algoritmo_cortar_bordes(imagen))
 
                         #En caso de que no hayamos dado ningun nombre, podremos el que tenia
                         if nombre == None:
@@ -1121,7 +1121,7 @@ def recortar_bordes_negros(ruta_origen:str, ruta_destino:str, nombre:str=None, a
 
                         #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                         #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                        nombre = comprobar_duplicadas(ruta_destino, nombre)
+                        nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                         #Guardamos la nueva imagen
                         nueva_imagen.convert('RGB').save(os.path.join(ruta_destino, nombre))
@@ -1171,7 +1171,7 @@ def recortar_varios_bordes_negros(ruta:str, numeracion_auto=False, aviso_fallos=
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-        nueva_ruta = preparar_directorio(ruta,'img_sin_borde_py')
+        nueva_ruta = _preparar_directorio(ruta,'img_sin_borde_py')
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -1184,12 +1184,12 @@ def recortar_varios_bordes_negros(ruta:str, numeracion_auto=False, aviso_fallos=
                 ruta_imagen = os.path.join(ruta, archivo)
 
                 #creamos el nombre del archivo
-                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
 
                 if recortar_bordes_negros(ruta_imagen, nueva_ruta, nombre_archivo, aviso_fallos):
                     cont = cont + 1
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes recortadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')                
+            print(f'Proceso terminado, {str(cont-1)} imagenes recortadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')                
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
@@ -1224,7 +1224,7 @@ def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_iz
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             with Image.open(ruta_origen) as imagen:
 
@@ -1254,7 +1254,7 @@ def recortar_foto(ruta_origen:str, ruta_destino:str, margen_der:int=0, margen_iz
 
                     #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                     #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+                    nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                     #Convertir al modo RGB si es RGBA, es decir, si tiene canal Alpha y hay transparencia,
                     #ya que el formato JPEG o JPG no puede guardar datos en modo RGBA, por ende, quitamos la transparencia
@@ -1314,7 +1314,7 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
             if (isinstance(margen_izq, int) and isinstance(margen_der, int) and isinstance(margen_sup, int) and isinstance(margen_inf, int)):
 
                 #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-                nueva_ruta = preparar_directorio(ruta, "img_recortadas_py")
+                nueva_ruta = _preparar_directorio(ruta, "img_recortadas_py")
 
                 #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
                 if nueva_ruta != None:
@@ -1327,12 +1327,12 @@ def recortar_varias_fotos(ruta:str, margen_der:int=0, margen_izq:int=0, margen_s
                         ruta_imagen = os.path.join(ruta, archivo)
                         
                         #creamos el nombre del archivo
-                        nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                        nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
 
                         if recortar_foto(ruta_imagen,nueva_ruta,margen_der,margen_izq,margen_sup,margen_inf,nombre=nombre_archivo,aviso=aviso_fallos):
                             cont += 1
 
-                    print(f'Proceso terminado, {str(cont-1)} imagenes recortadas de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')
+                    print(f'Proceso terminado, {str(cont-1)} imagenes recortadas de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')
             else:
                 print('Los parametros deben de ser numeros enteros')
         else:
@@ -1371,7 +1371,7 @@ def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos el pdf
-        nueva_ruta = preparar_directorio(ruta, "pdf_imagenes_py")
+        nueva_ruta = _preparar_directorio(ruta, "pdf_imagenes_py")
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -1411,7 +1411,7 @@ def varias_fotos_a_pdf(ruta:str, nombre_archivo:str, aviso_fallos=False):
             #Guardamos el pdf con todos los datos y paginas creadas
             pdf.save()
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes insertadas en pdf de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
+            print(f'Proceso terminado, {str(cont-1)} imagenes insertadas en pdf de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
@@ -1456,7 +1456,7 @@ def imagen_svg_a_png(ruta_origen:str, ruta_destino:str, nombre:str=None ,aviso:b
 
                 #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                 #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                nombre = comprobar_duplicadas(ruta_destino, nombre)
+                nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
                 #aqui se utiliza la libreria aspose.words
                 #cargar el documento
@@ -1519,7 +1519,7 @@ def imagenes_svg_a_png(ruta:str, numeracion_auto=False, aviso_fallos=False):
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-        nueva_ruta = preparar_directorio(ruta, "img_PNG_py")
+        nueva_ruta = _preparar_directorio(ruta, "img_PNG_py")
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -1532,12 +1532,12 @@ def imagenes_svg_a_png(ruta:str, numeracion_auto=False, aviso_fallos=False):
                 ruta_imagen = os.path.join(ruta, archivo)
                 
                 #creamos el nombre del archivo
-                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
 
                 if imagen_svg_a_png(ruta_imagen,nueva_ruta,nombre=nombre_archivo,aviso=aviso_fallos):
                     cont += 1
 
-            print(f'Proceso terminado, {str(cont-1)} SVG tratados de {contar_imagenes_en_directorio(ruta)} SVG encontrados')        
+            print(f'Proceso terminado, {str(cont-1)} SVG tratados de {_contar_imagenes_en_directorio(ruta)} SVG encontrados')        
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
 
@@ -1565,7 +1565,7 @@ def borrar_fondo_foto(ruta_origen:str, ruta_destino:str, nombre:str=None, aviso:
     ruta_destino = os.path.normpath(ruta_destino)
 
     #Comprobamos que existe la ruta y que el archivo es una imagen integra y sin corromper
-    if os.path.isfile(ruta_origen) and imgvld(ruta_origen):
+    if os.path.isfile(ruta_origen) and _imgvld(ruta_origen):
         try:
             #Comprobamos que existe la ruta que guarda las imagenes
             if os.path.isdir(ruta_destino):
@@ -1588,7 +1588,7 @@ def borrar_fondo_foto(ruta_origen:str, ruta_destino:str, nombre:str=None, aviso:
 
                     #comprobamos que no existe una imagen llamada igual que la nueva, en caso contrario, la renombramos con la
                     #fecha actual. El parametro nombre ha de tener la extension para funcionar correctamente
-                    nombre = comprobar_duplicadas(ruta_destino, nombre)
+                    nombre = _comprobar_duplicadas(ruta_destino, nombre)
 
 
                     #Convertir al modo RGB si es RGBA, es decir, si tiene canal Alpha y hay transparencia,
@@ -1647,7 +1647,7 @@ def borrar_fondo_varias_fotos(ruta:str, numeracion_auto=False, aviso_fallos=Fals
     if os.path.exists(ruta) and os.path.isdir(ruta):
 
         #obtenemos la nueva ruta donde guardaremos las imagenes modificadas
-        nueva_ruta = preparar_directorio(ruta, "img_sin_fondo_py")
+        nueva_ruta = _preparar_directorio(ruta, "img_sin_fondo_py")
 
         #Si se ha creado y dispuesto el directorio para el guardado de las imagenes, se continua
         if nueva_ruta != None:
@@ -1660,12 +1660,12 @@ def borrar_fondo_varias_fotos(ruta:str, numeracion_auto=False, aviso_fallos=Fals
                 ruta_imagen = os.path.join(ruta, archivo)
                 
                 #creamos el nombre del archivo
-                nombre_archivo = poner_indice_imagenes(numeracion_auto, archivo, cont)
+                nombre_archivo = _poner_indice_imagenes(numeracion_auto, archivo, cont)
 
                 if borrar_fondo_foto(ruta_imagen,nueva_ruta,nombre=nombre_archivo,aviso=aviso_fallos):
                     cont += 1
 
-            print(f'Proceso terminado, {str(cont-1)} imagenes sin fondo de {contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
+            print(f'Proceso terminado, {str(cont-1)} imagenes sin fondo de {_contar_imagenes_en_directorio(ruta)} imagenes encontradas')  
 
     else:
         print('El directorio introducido por parametro no existe o no es un directorio')
@@ -1680,8 +1680,6 @@ except TypeError as e:
 
 
 #--------------------------------------------------------------------------
-
-#TODO poner nomeclatura funciones privadas con _ delante de la función
 
 #TODO instalar requerimientos automaticamente
 

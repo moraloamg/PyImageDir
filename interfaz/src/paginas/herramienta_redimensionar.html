@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Herramienta 1</title>
+    <title>Redimensionar imágenes</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -76,10 +76,13 @@
     </header>
     <div class="cuerpo-pagina">
       <div class="titulo-cuerpo">
-        <h1 class="titulo-cuerpo-titulo">Herramienta 1</h1>
+        <h1 class="titulo-cuerpo-titulo">Redimensionar imágenes</h1>
         <h2 class="titulo-cuerpo-subtitulo">
-          La herramienta 1 hace esto, esto y esto, para lo otro y lo de más
-          allá.
+          Esta herramienta permite redimensionar las imágenes de un directorio. Se ha de abrir la carpeta para
+          seleccionarla, indicar el alto y en ancho (en píxeles), o sólamente el ancho para redimensionar la imagen proporcionalmente.
+          Una vez los datos estén puestos, pulsar el botón «ejecutar».
+          Finalmente, las imágenes tratadas se dispondrán un directorio llamado 'img_redimensionadas_py' dentro del
+          original dispuesto.
         </h2>
       </div>
       <!-- CUERPO DE LA HERRAMIENTA (EN DESARROLLO) -->
@@ -128,17 +131,17 @@
             <div id="options" class="dropdown-content">
               <div
                 class="campo-formulario checkbox"
-                title="Selecciona esta opción si te interesa la opción 1"
+                title="Añade una numeración junto al título de la imagen, útil si éstas no tienen un nombre u orden claro"
               >
                 <input type="checkbox" id="opcion1" name="opcion1" />
-                <label for="opcion1">Opción 1</label>
+                <label for="opcion1">Numeración automática</label>
               </div>
               <div
                 class="campo-formulario checkbox"
-                title="Selecciona esta opción si te interesa la opción 2"
+                title="Muestra si hay algún fallo en el tratamiento de alguna de las imágenes"
               >
                 <input type="checkbox" id="opcion2" name="opcion2" />
-                <label for="opcion2">Opción 2</label>
+                <label for="opcion2">Aviso de fallos</label>
               </div>
             </div>
           </div>
