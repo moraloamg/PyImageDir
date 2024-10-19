@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redimensionar imágenes</title>
+    <title>Imágenes a .SVG</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -16,7 +16,11 @@
       href="../css/estilos_herramienta.css"
     />
     <link rel="stylesheet" type="text/css" href="../css/estilos_cuerpo.css" />
-    <link rel="stylesheet" type="text/css" href="../css/estilos_pie_pagina.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../css/estilos_pie_pagina.css"
+    />
   </head>
   <body>
     <!-- CABECERA -->
@@ -77,15 +81,11 @@
     </header>
     <div class="cuerpo-pagina">
       <div class="titulo-cuerpo">
-        <h1 class="titulo-cuerpo-titulo">Redimensionar imágenes</h1>
+        <h1 class="titulo-cuerpo-titulo">Imágenes a .SVG</h1>
         <h2 class="titulo-cuerpo-subtitulo">
-          Esta herramienta permite redimensionar las imágenes de un directorio.
-          Se ha de abrir la carpeta para seleccionarla, indicar el alto y en
-          ancho (en píxeles), o sólamente el ancho para redimensionar la imagen
-          proporcionalmente. Una vez los datos estén puestos, pulsar el botón
-          «ejecutar». Finalmente, las imágenes tratadas se dispondrán un
-          directorio llamado 'img_redimensionadas_py' dentro del original
-          dispuesto.
+          Herramienta la cual convierte imagenes vectoriales SVG de un
+          directorio en PNG Finalmente, las imágenes tratadas se dispondrán un
+          directorio llamado 'img_PNG_py' dentro del original dispuesto.
         </h2>
       </div>
       <!-- CUERPO DE LA HERRAMIENTA (EN DESARROLLO) -->
@@ -109,24 +109,6 @@
             style="display: none"
             onchange="document.getElementById('rutaCarpeta').textContent = this.value;"
           />
-          <div class="campo-formulario">
-            <label for="ancho">Ancho:</label>
-            <input
-              type="text"
-              id="ancho"
-              name="ancho"
-              placeholder="Escribe el ancho de la imagen en píxeles"
-            />
-          </div>
-          <div class="campo-formulario">
-            <label for="alto">Alto:</label>
-            <input
-              type="text"
-              id="alto"
-              name="alto"
-              placeholder="Escribe el alto de la imagen en píxeles"
-            />
-          </div>
           <div class="dropdown">
             <div class="dropdown-header" onclick="toggleOptions()">
               <strong>Opciones adicionales</strong> <span class="arrow">▼</span>
@@ -151,6 +133,7 @@
           <button type="submit" class="boton-formulario">Ejecutar</button>
         </form>
       </div>
+
       <!-- PIE DE PAGINA -->
       <div class="pie-pagina">
         <div class="pie-pagina-contenedor">

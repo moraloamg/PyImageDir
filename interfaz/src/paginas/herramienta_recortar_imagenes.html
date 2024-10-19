@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redimensionar imágenes</title>
+    <title>Recortar imágenes</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -77,15 +77,12 @@
     </header>
     <div class="cuerpo-pagina">
       <div class="titulo-cuerpo">
-        <h1 class="titulo-cuerpo-titulo">Redimensionar imágenes</h1>
+        <h1 class="titulo-cuerpo-titulo">Recortar imágenes</h1>
         <h2 class="titulo-cuerpo-subtitulo">
-          Esta herramienta permite redimensionar las imágenes de un directorio.
-          Se ha de abrir la carpeta para seleccionarla, indicar el alto y en
-          ancho (en píxeles), o sólamente el ancho para redimensionar la imagen
-          proporcionalmente. Una vez los datos estén puestos, pulsar el botón
-          «ejecutar». Finalmente, las imágenes tratadas se dispondrán un
-          directorio llamado 'img_redimensionadas_py' dentro del original
-          dispuesto.
+            Herramienta la cual aplica un recorte a las imágenes halladas en un directorio.
+            El recorte tomará como referencia los márgenes de las fotos. La medida será en pixeles.
+            Las imágenes tratadas se dispondrán un directorio llamado 'img_recortadas_py' dentro del
+            original dispuesto.
         </h2>
       </div>
       <!-- CUERPO DE LA HERRAMIENTA (EN DESARROLLO) -->
@@ -110,21 +107,39 @@
             onchange="document.getElementById('rutaCarpeta').textContent = this.value;"
           />
           <div class="campo-formulario">
-            <label for="ancho">Ancho:</label>
+            <label for="ancho">Margen derecho:</label>
             <input
               type="text"
-              id="ancho"
-              name="ancho"
-              placeholder="Escribe el ancho de la imagen en píxeles"
+              id="margen_der"
+              name="margen_der"
+              placeholder="Escribe el margen derecho en píxeles"
             />
           </div>
           <div class="campo-formulario">
-            <label for="alto">Alto:</label>
+            <label for="alto">Margen izquierdo:</label>
             <input
               type="text"
-              id="alto"
-              name="alto"
-              placeholder="Escribe el alto de la imagen en píxeles"
+              id="margen_izq"
+              name="margen_izq"
+              placeholder="Escribe el margen izquierdo en píxeles"
+            />
+          </div>
+          <div class="campo-formulario">
+            <label for="alto">Margen superior:</label>
+            <input
+              type="text"
+              id="margen_sup"
+              name="margen_sup"
+              placeholder="Escribe el margen superior en píxeles"
+            />
+          </div>
+          <div class="campo-formulario">
+            <label for="alto">Margen inferior:</label>
+            <input
+              type="text"
+              id="margen_inf"
+              name="margen_inf"
+              placeholder="Escribe el margen inferior en píxeles"
             />
           </div>
           <div class="dropdown">
@@ -151,46 +166,48 @@
           <button type="submit" class="boton-formulario">Ejecutar</button>
         </form>
       </div>
+      
       <!-- PIE DE PAGINA -->
-      <div class="pie-pagina">
-        <div class="pie-pagina-contenedor">
-          <h2>Textos Legales</h2>
-          <ul class="pie-pagina-enlaces">
-            <li><a href="#"> Nota Legal </a></li>
-            <li><a href="#"> Política de privacidad </a></li>
-            <li><a href="#"> Política de Cookies </a></li>
-            <li><a href="#"> Aviso Legal </a></li>
-            <li><a href="#"> Preguntas Frecuentes </a></li>
-          </ul>
-        </div>
-        <div class="pie-pagina-contenedor">
-          <h2>Contacto</h2>
-          <form action="" class="registro">
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Introduce tu correo"
-            />
-            <button type="submit">Contactar</button>
-          </form>
-        </div>
-        <div class="pie-pagina-contenedor">
-          <h2>Dirección</h2>
-          <p class="direccion">
-            Navalmoral de la Mata, 10300<br />
-            Cáceres, España.
-          </p>
-          <ul class="redes-sociales">
-            <li><i class="fab fa-linkedin"></i></li>
-            <li><i class="fab fa-twitter"></i></li>
-            <li><i class="fab fa-instagram"></i></li>
-            <li><i class="fab fa-github"></i></li>
-          </ul>
-        </div>
+    <div class="pie-pagina">
+      <div class="pie-pagina-contenedor">
+        <h2>Textos Legales</h2>
+        <ul class="pie-pagina-enlaces">
+          <li><a href="#"> Nota Legal </a></li>
+          <li><a href="#"> Política de privacidad </a></li>
+          <li><a href="#"> Política de Cookies </a></li>
+          <li><a href="#"> Aviso Legal </a></li>
+          <li><a href="#"> Preguntas Frecuentes </a></li>
+        </ul>
       </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Contacto</h2>
+        <form action="" class="registro">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Introduce tu correo"
+          />
+          <button type="submit">Contactar</button>
+        </form>
+      </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Dirección</h2>
+        <p class="direccion">
+          Navalmoral de la Mata, 10300<br />
+          Cáceres, España.
+        </p>
+        <ul class="redes-sociales">
+          <li><i class="fab fa-linkedin"></i></li>
+          <li><i class="fab fa-twitter"></i></li>
+          <li><i class="fab fa-instagram"></i></li>
+          <li><i class="fab fa-github"></i></li>
+        </ul>
+      </div>
+    </div>
     </div>
     <!-- colocamos el script cuando se ha cargado todo-->
     <script src="../js/funciones_pagina.js"></script>
   </body>
+  
 </html>

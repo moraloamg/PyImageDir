@@ -16,6 +16,7 @@
       href="../css/estilos_herramienta.css"
     />
     <link rel="stylesheet" type="text/css" href="../css/estilos_cuerpo.css" />
+    <link rel="stylesheet" type="text/css" href="../css/estilos_pie_pagina.css" />
   </head>
   <body>
     <!-- CABECERA -->
@@ -78,11 +79,11 @@
       <div class="titulo-cuerpo">
         <h1 class="titulo-cuerpo-titulo">Modificar extensiones de imágenes</h1>
         <h2 class="titulo-cuerpo-subtitulo">
-          Herramienta que cambia las extensiones de varias imagenes en un directorio. 
-          Las extensiones validas son: 'jpg', 'jpeg', 'png', 'bmp', 'gif', 'tif', 'tiff'.
-          Una vez los datos estén puestos, pulsar el botón «ejecutar».
-          Las imágenes tratadas se dispondrán un directorio llamado 'img_transformadas_py' dentro del
-          original dispuesto.
+          Herramienta que cambia las extensiones de varias imagenes en un
+          directorio. Las extensiones validas son: 'jpg', 'jpeg', 'png', 'bmp',
+          'gif', 'tif', 'tiff'. Una vez los datos estén puestos, pulsar el botón
+          «ejecutar». Las imágenes tratadas se dispondrán un directorio llamado
+          'img_transformadas_py' dentro del original dispuesto.
         </h2>
       </div>
       <!-- CUERPO DE LA HERRAMIENTA (EN DESARROLLO) -->
@@ -106,17 +107,17 @@
             style="display: none"
             onchange="document.getElementById('rutaCarpeta').textContent = this.value;"
           />
-          
-          <div class="campo-formulario">
+
+          <div class="campo-formulario lista">
             <label for="dimension">Extensiones:</label>
             <select id="dimension" name="dimension">
-              <option value="640x480">.jpg</option>
-              <option value="800x600">.jpeg</option>
-              <option value="1024x768">.png</option>
-              <option value="1280x720">.bmp</option>
-              <option value="1920x1080">.gif</option>
-              <option value="2560x1440">.tif</option>
-              <option value="3840x2160">.tiff</option>
+              <option value="jpg">.jpg</option>
+              <option value="jpeg">.jpeg</option>
+              <option value="png">.png</option>
+              <option value="bmp">.bmp</option>
+              <option value="gif">.gif</option>
+              <option value="tif">.tif</option>
+              <option value="tiff">.tiff</option>
             </select>
           </div>
           <div class="dropdown">
@@ -144,6 +145,44 @@
         </form>
       </div>
       <!--FIN FORMULARIO-->
+      <!-- PIE DE PAGINA -->
+    <div class="pie-pagina">
+      <div class="pie-pagina-contenedor">
+        <h2>Textos Legales</h2>
+        <ul class="pie-pagina-enlaces">
+          <li><a href="#"> Nota Legal </a></li>
+          <li><a href="#"> Política de privacidad </a></li>
+          <li><a href="#"> Política de Cookies </a></li>
+          <li><a href="#"> Aviso Legal </a></li>
+          <li><a href="#"> Preguntas Frecuentes </a></li>
+        </ul>
+      </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Contacto</h2>
+        <form action="" class="registro">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Introduce tu correo"
+          />
+          <button type="submit">Contactar</button>
+        </form>
+      </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Dirección</h2>
+        <p class="direccion">
+          Navalmoral de la Mata, 10300<br />
+          Cáceres, España.
+        </p>
+        <ul class="redes-sociales">
+          <li><i class="fab fa-linkedin"></i></li>
+          <li><i class="fab fa-twitter"></i></li>
+          <li><i class="fab fa-instagram"></i></li>
+          <li><i class="fab fa-github"></i></li>
+        </ul>
+      </div>
+    </div>
     </div>
     <!-- colocamos el script cuando se ha cargado todo-->
     <script src="../js/funciones_pagina.js"></script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redimensionar imágenes</title>
+    <title>Eliminar bordes negros</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -77,15 +77,11 @@
     </header>
     <div class="cuerpo-pagina">
       <div class="titulo-cuerpo">
-        <h1 class="titulo-cuerpo-titulo">Redimensionar imágenes</h1>
+        <h1 class="titulo-cuerpo-titulo">Recortar bordes negros</h1>
         <h2 class="titulo-cuerpo-subtitulo">
-          Esta herramienta permite redimensionar las imágenes de un directorio.
-          Se ha de abrir la carpeta para seleccionarla, indicar el alto y en
-          ancho (en píxeles), o sólamente el ancho para redimensionar la imagen
-          proporcionalmente. Una vez los datos estén puestos, pulsar el botón
-          «ejecutar». Finalmente, las imágenes tratadas se dispondrán un
-          directorio llamado 'img_redimensionadas_py' dentro del original
-          dispuesto.
+          Esta herramienta que elimina los bordes negros de fotos halladas en un directorio. 
+          Las imágenes tratadas se dispondrán un directorio llamado 'img_sin_borde_py' dentro del
+          original dispuesto.
         </h2>
       </div>
       <!-- CUERPO DE LA HERRAMIENTA (EN DESARROLLO) -->
@@ -109,24 +105,6 @@
             style="display: none"
             onchange="document.getElementById('rutaCarpeta').textContent = this.value;"
           />
-          <div class="campo-formulario">
-            <label for="ancho">Ancho:</label>
-            <input
-              type="text"
-              id="ancho"
-              name="ancho"
-              placeholder="Escribe el ancho de la imagen en píxeles"
-            />
-          </div>
-          <div class="campo-formulario">
-            <label for="alto">Alto:</label>
-            <input
-              type="text"
-              id="alto"
-              name="alto"
-              placeholder="Escribe el alto de la imagen en píxeles"
-            />
-          </div>
           <div class="dropdown">
             <div class="dropdown-header" onclick="toggleOptions()">
               <strong>Opciones adicionales</strong> <span class="arrow">▼</span>
@@ -152,43 +130,43 @@
         </form>
       </div>
       <!-- PIE DE PAGINA -->
-      <div class="pie-pagina">
-        <div class="pie-pagina-contenedor">
-          <h2>Textos Legales</h2>
-          <ul class="pie-pagina-enlaces">
-            <li><a href="#"> Nota Legal </a></li>
-            <li><a href="#"> Política de privacidad </a></li>
-            <li><a href="#"> Política de Cookies </a></li>
-            <li><a href="#"> Aviso Legal </a></li>
-            <li><a href="#"> Preguntas Frecuentes </a></li>
-          </ul>
-        </div>
-        <div class="pie-pagina-contenedor">
-          <h2>Contacto</h2>
-          <form action="" class="registro">
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Introduce tu correo"
-            />
-            <button type="submit">Contactar</button>
-          </form>
-        </div>
-        <div class="pie-pagina-contenedor">
-          <h2>Dirección</h2>
-          <p class="direccion">
-            Navalmoral de la Mata, 10300<br />
-            Cáceres, España.
-          </p>
-          <ul class="redes-sociales">
-            <li><i class="fab fa-linkedin"></i></li>
-            <li><i class="fab fa-twitter"></i></li>
-            <li><i class="fab fa-instagram"></i></li>
-            <li><i class="fab fa-github"></i></li>
-          </ul>
-        </div>
+    <div class="pie-pagina">
+      <div class="pie-pagina-contenedor">
+        <h2>Textos Legales</h2>
+        <ul class="pie-pagina-enlaces">
+          <li><a href="#"> Nota Legal </a></li>
+          <li><a href="#"> Política de privacidad </a></li>
+          <li><a href="#"> Política de Cookies </a></li>
+          <li><a href="#"> Aviso Legal </a></li>
+          <li><a href="#"> Preguntas Frecuentes </a></li>
+        </ul>
       </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Contacto</h2>
+        <form action="" class="registro">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Introduce tu correo"
+          />
+          <button type="submit">Contactar</button>
+        </form>
+      </div>
+      <div class="pie-pagina-contenedor">
+        <h2>Dirección</h2>
+        <p class="direccion">
+          Navalmoral de la Mata, 10300<br />
+          Cáceres, España.
+        </p>
+        <ul class="redes-sociales">
+          <li><i class="fab fa-linkedin"></i></li>
+          <li><i class="fab fa-twitter"></i></li>
+          <li><i class="fab fa-instagram"></i></li>
+          <li><i class="fab fa-github"></i></li>
+        </ul>
+      </div>
+    </div>
     </div>
     <!-- colocamos el script cuando se ha cargado todo-->
     <script src="../js/funciones_pagina.js"></script>

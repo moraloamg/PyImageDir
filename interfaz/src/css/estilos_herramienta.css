@@ -136,7 +136,7 @@
   gap: 10px;
 }
 
-/* Estilo para el recuadro de la ruta */
+/* Estilo para el recuadro de la ruta y archivos */
 #rutaCarpeta {
   font-size: 14px;
   color: #333;
@@ -145,3 +145,20 @@
   border-radius: 4px;
   align-self: flex-start;
 }
+
+#rutaArchivo {
+  font-size: 14px;
+  color: #333;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+/* opciones para los radion button */
+.campo-formulario .radio-buton div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
