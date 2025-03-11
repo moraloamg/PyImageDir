@@ -26,13 +26,13 @@ import aspose.words as aw
 from rembg import remove
 
 __author__ = "Adrian Mateos"
-__copyright__ = "Copyright 2023"
+__copyright__ = "Copyright 2025"
 __credits__ = []
 __license__ = "GPL"
 __version__ = "1.1"
 __maintainer__ = ""
 __email__ = "https://github.com/moraloamg"
-__status__ = "Development"
+__status__ = "Completed"
 
 
 def _imgvld(ruta:str):
@@ -1671,30 +1671,24 @@ def borrar_fondo_varias_fotos(ruta:str, numeracion_auto=False, aviso_fallos=Fals
         print('El directorio introducido por parametro no existe o no es un directorio')
 
 #----------------------Fin del codigo---------------------------------
-ruta = r'C:\Users\Usuario\Desktop\aaa'
 
-try:
-    borrar_fondo_varias_fotos(ruta)
-except TypeError as e:
-    print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
+
+#------------------------EJEMPLO---------------------------------------
+
+#ruta = r'C:\Users\Usuario\Desktop\tmp'
+
+#try:
+    #redimensionar_varias_fotos(ruta, 500)
+#except TypeError as e:
+    #print(f"Error: Algunos parametros introducidos en la funcion son incorrectos o faltantes: {e}")
 
 
 #--------------------------------------------------------------------------
 
 #TODO instalar requerimientos automaticamente
 
-#TODO retornar booleano y mensaje de texto (str) en los metodos en los que se pueda y revisar lo de los avisos (En una tupla?)
-#TODO ¿Mirar velocidad de ejecucion y optimizar aquello que se pueda (poner funciones para aquellos trozos que se repitan?
+
         
-#TODO Que el directorio de salida no se encuentre en el directorio de entrada (Que el directorio se proporcione de manera independiente, esto se hará cuando esté listo el lado del cliente)
-        
-#TODO Manipular rutas con pathlib?
-
-#TODO poner if __name__ == '__main__' en caso de que ponga el uso por consola aquí más abajo?
-
-#TODO ¿Comprobar que el directorio no esta vacio antes de trabajar con el?¿Hacerlo en el lado del cliente?
-
-#TODO (En un mismo script o clase) Orden -> funciones independientes (las de arriba), funciones dependientes (las de abajo)
 
 
 
